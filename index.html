@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Clicker 🍕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/landing.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/shop.css">
+    <link rel="stylesheet" href="css/modals.css">
+</head>
+<body>
+
+    
+    <div id="landing-screen" class="screen active">
+        <div class="landing-card">
+            <div class="landing-pizza">🍕</div>
+            <h1 class="landing-title">Pizza Clicker</h1>
+            <p class="landing-sub">Postav největší pizzové impérium!</p>
+            <div class="landing-form">
+                <input type="text" id="pizzeria-name" placeholder="Název tvé pizzerie..." maxlength="30" autocomplete="off">
+                <button id="start-game-btn" class="btn-start">Začít hrát →</button>
+            </div>
+            <p class="landing-hint">💾 Postup se ukládá automaticky</p>
+        </div>
+    </div>
+
+   
+    <div id="game-screen" class="screen">
+
+      
+        <header class="topbar">
+            <div class="topbar-logo">
+                <span class="topbar-emoji">🍕</span>
+                <span id="pizzeria-title" class="topbar-name">Moje Pizzerie</span>
+            </div>
+            <div class="topbar-stats">
+                <div class="topbar-stat">
+                    <span class="ts-label">Hotovost</span>
+                    <span class="ts-value green" id="money-display">0 €</span>
+                </div>
+                <div class="ts-divider"></div>
+                <div class="topbar-stat">
+                    <span class="ts-label">Produkce</span>
+                    <span class="ts-value amber" id="pps-display">0 €/s</span>
+                </div>
+                <div class="ts-divider"></div>
+                <div class="topbar-stat">
+                    <span class="ts-label">Celkem</span>
+                    <span class="ts-value purple" id="total-display">0 €</span>
+                </div>
+                <div class="ts-divider"></div>
+                <div class="topbar-stat">
+                    <span class="ts-label">Za klik</span>
+                    <span class="ts-value" id="click-value-display">1 €</span>
+                </div>
+            </div>
+            <div class="topbar-actions">
+                <button id="leaderboard-btn" class="tb-btn">🏅 Žebříček</button>
+                <button id="reset-btn" class="tb-btn tb-btn-danger">↺ Reset</button>
+            </div>
+        </header>
+
+      
+        <div class="game-layout">
+
+           
+            <main class="pizza-area">
+                <div class="pizza-wrap">
+                    <div id="float-container"></div>
+                    <div id="pizza-button">🍕</div>
+                </div>
+                <p class="pizza-tip">Klikni na pizzu!</p>
+            </main>
+
+           
+            <aside class="shop-area">
+                <div class="shop-tabs">
+                    <button class="shop-tab active" data-tab="click">👊 Klikací</button>
+                    <button class="shop-tab" data-tab="pps">⏱ Produkce</button>
+                </div>
+                <div id="shop-list" class="shop-list"></div>
+            </aside>
+
+        </div>
+    </div>
+
+    
+    <div id="leaderboard-modal" class="modal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <span>🏅 Žebříček TOP 10</span>
+                <button class="modal-close" id="close-leaderboard">✕</button>
+            </div>
+            <div class="modal-body">
+                <table class="lb-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Hráč</th>
+                            <th>€/s</th>
+                            <th>Celkem</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body"></tbody>
+                </table>
+                <p class="lb-note">Lokální žebříček — uložen v tomto prohlížeči</p>
+            </div>
+        </div>
+    </div>
+
+   
+    <div id="reset-modal" class="modal">
+        <div class="modal-box modal-small">
+            <div class="modal-head">
+                <span>⚠️ Reset hry</span>
+                <button class="modal-close" id="close-reset">✕</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:20px">Opravdu chceš smazat veškerý postup a začít od začátku?</p>
+                <div class="modal-btns">
+                    <button id="confirm-reset" class="mbtn mbtn-danger">Ano, resetovat</button>
+                    <button id="cancel-reset" class="mbtn mbtn-cancel">Ne, zpět</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/landing.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/shop.js"></script>
+    <script src="js/leaderboard.js"></script>
+    <script src="js/reset.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>
