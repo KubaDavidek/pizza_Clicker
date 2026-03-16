@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     
     document.addEventListener('keydown', e => {
-        if (e.code === 'Space' && el.gameScreen.classList.contains('active')) {
+        if (e.code === 'Space' && !e.repeat && el.gameScreen.classList.contains('active')) {
             e.preventDefault();
             handleClick({ clientX: innerWidth / 2, clientY: innerHeight / 2 });
         }
