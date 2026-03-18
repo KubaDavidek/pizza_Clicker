@@ -12,3 +12,8 @@
 
 7.2.2026 - David Čadek
     Přidáno resetovací tlačítko + README
+
+18.3.2026 - Jakub Davídek 
+    Přídání logování errorů
+    Vypnutí debug modu
+    Validace vstupu uživatele

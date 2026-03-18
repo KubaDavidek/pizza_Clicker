@@ -3,6 +3,7 @@ import os
 from flask import Flask, request, jsonify, send_from_directory
 from werkzeug.exceptions import BadRequest, HTTPException, UnsupportedMediaType
 from logging_config import configure_logging
+from validation import validate_leaderboard_payload, validate_save_payload
 
 app = Flask(__name__, static_folder='.')
 
@@ -42,8 +43,9 @@ def get_save():
 
 @app.route('/api/save', methods=['POST'])
 def post_save():
+    save_data = validate_save_payload(get_json_body())
     with open(SAVE_FILE, 'w', encoding='utf-8') as f:
-        json.dump(get_json_body(), f, ensure_ascii=False, indent=2)
+        json.dump(save_data, f, ensure_ascii=False, indent=2)
     return jsonify({'ok': True})
 
 @app.route('/api/save', methods=['DELETE'])
@@ -62,8 +64,9 @@ def get_leaderboard():
 
 @app.route('/api/leaderboard', methods=['POST'])
 def post_leaderboard():
+    leaderboard_data = validate_leaderboard_payload(get_json_body())
     with open(LEADERBOARD_FILE, 'w', encoding='utf-8') as f:
-        json.dump(get_json_body(), f, ensure_ascii=False, indent=2)
+        json.dump(leaderboard_data, f, ensure_ascii=False, indent=2)
     return jsonify({'ok': True})
 
 
