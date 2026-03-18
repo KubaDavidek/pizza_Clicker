@@ -1,8 +1,10 @@
 {
   "pizzeriaName": "kastani",
-  "money": 65,
-  "totalEarned": 65,
-  "clickValue": 1,
-  "upgrades": {},
-  "lastSave": 1773848072514
+  "money": 105,
+  "totalEarned": 155,
+  "clickValue": 2,
+  "upgrades": {
+    "c1": true
+  },
+  "lastSave": 1773848901086
 }

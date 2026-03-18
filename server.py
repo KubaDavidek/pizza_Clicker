@@ -1,7 +1,7 @@
 import json
 import os
 from flask import Flask, request, jsonify, send_from_directory
-from werkzeug.exceptions import BadRequest, HTTPException, UnsupportedMediaType
+from werkzeug.exceptions import BadRequest, HTTPException
 from logging_config import configure_logging
 from validation import validate_leaderboard_payload, validate_save_payload
 
@@ -16,7 +16,7 @@ configure_logging(app)
 
 def get_json_body():
     if not request.is_json:
-        raise UnsupportedMediaType('Request must use application/json content type.')
+        raise BadRequest('Request must use application/json content type.')
 
     data = request.get_json()
     if data is None:
