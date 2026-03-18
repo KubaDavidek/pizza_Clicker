@@ -1,0 +1,99 @@
+Architecture
+- Repo obsahuje README s popisem architektury aplikace (frontend, backend, databaze).
+- Repo obsahuje prehled pouzitych technologii a jejich verzi.
+- Projekt ma jasnou strukturu slozek (napr. src, public, assets, components, api). - HOTOVO ALE po pridani novych souboru zmenit
+- Logika aplikace je oddelena od uzivatelskeho rozhrani.
+- Staticke soubory (obrazky, CSS, JS) jsou oddeleny od aplikacni logiky.
+- Projekt obsahuje konfiguracni soubor pro produkcni prostredi.
+- Citlive udaje (hesla, API klice) nejsou ulozeny v repozitari.
+
+Dependencies
+- Projekt obsahuje seznam vsech externich knihoven a jejich verzi.
+- Vsechny zavislosti jsou instalovany pomoci spravce balicku (napr. npm, pip).
+- Repo obsahuje lock soubor (napr. package-lock.json).
+- Tym pravidelne kontroluje aktualizace zavislosti.
+- Tym eviduje duvod pouziti kazde externi knihovny.
+- Z projektu byly odstraneny nepouzivane knihovny.
+
+API
+- Server vraci spravne HTTP status kody (200, 400, 404, 500). - HOTOVO
+- API endpointy jsou dokumentovane. - HOTOVO
+- Neplatne pozadavky vraceji srozumitelnou chybu. - HOTOVO
+- Server nevraci interni chybove informace uzivateli.
+- Server spravne nastavuje Content-Type odpovedi.
+- API validuje vstupni data.
+- Velke odpovedi serveru jsou komprimovany (GZIP).
+
+Performance
+- Obrazky jsou optimalizovane a maji primerenou velikost.
+- Obrazky pouzivaji moderni formaty (napr. WebP).
+- Nepouzivane CSS a JavaScript byly odstraneny.
+- JavaScript a CSS soubory jsou minifikovane.
+- Pocet HTTP requestu pri nacteni stranky byl analyzovan.
+- Velke soubory jsou nacitany az pri potrebe (lazy loading).
+- Staticke soubory jsou distribuovany pres CDN (Content Delivery Network).
+- Server pouziva kompresi prenasenych dat.
+- Bylo provedeno mereni vykonu pomoci nastroje Lighthouse.
+- Nejvetsi prvek stranky byl optimalizovan pro rychle nacteni (LCP - Largest Contentful Paint).
+
+Optimalization
+- Staticke soubory maji nastavene HTTP hlavicky Cache-Control.
+- Cache je nastavena pro obrazky, CSS a JavaScript.
+- Tym overil funkcnost cache.
+- Pri zmene souboru dochazi k invalidaci cache.
+- CDN cache je spravne nastavena pro staticke soubory.
+
+SEO & Accesibility
+- Stranka ma nastaveny title.
+- Stranka ma meta description.
+- Stranka pouziva spravnou strukturu nadpisu.
+- Obrazky maji atribut alt.
+- Stranka je pouzitelna na mobilnich zarizenich.
+
+Security
+- Vsechny vstupy uzivatele jsou validovany.
+- Aplikace je chranena proti XSS (Cross Site Scripting).
+- Aplikace je chranena proti CSRF (Cross Site Request Forgery).
+- Databazove dotazy pouzivaji parametrizovane dotazy.
+- Server neprijima neplatna nebo neuplna data.
+- Cookies maji nastavene atributy Secure a HttpOnly.
+- Byla provedena kontrola podle OWASP Top 10.
+
+Testing
+- Aplikace byla otestovana v nekolika prohlizecich.
+- Aplikace byla otestovana na mobilnim zarizeni.
+- Byl proveden test neplatnych vstupu.
+- Byl proveden test vice soucasnych hracu.
+- Byl proveden zakladni vykonovy test serveru.
+- Nalezene chyby byly zaznamenany do issue trackeru.
+
+Monitoring
+- Aplikace zapisuje chyby do logu.
+- Logy obsahuji cas chyby a typ chyby.
+- Logy jsou dostupne tymu pro analyzu.
+- Tym sleduje pocet hracu a her.
+- Je nasazen nastroj pro analytiku navstevnosti.
+- Je pouzit nastroj pro kontrolu dostupnosti webu (uptime monitoring).
+
+Deployment
+- Aplikace je nasazena na verejnem serveru.
+- Aplikace ma verejnou URL.
+- Produkcni verze bezi bez debug rezimu.
+- Tym ma pripraveny postup nasazeni nove verze aplikace.
+- Opravy chyb lze nasadit bez vypadku aplikace.
+
+Management
+- Repo obsahuje historii commitu vsech clenu tymu.
+- Kazda zmena kodu je prirazena konkretnimu autorovi.
+- Tym pouziva issue tracker pro evidenci ukolu a chyb.
+- CHANGELOG.md obsahuje zaznamy prace jednotlivych clenu tymu.
+- Kazda oprava chyby je propojena s konkretnim commitem.
+
+Team Scrapes
+- Merge konflikt vznikl v posledni minute a nikdo nevedel proc.
+- Nejaky commit zmizel a tym stravil cas jeho hledanim.
+- Nektery clen zmenil konfiguraci a ostatni museli resit nefunkcni build.
+- Pull request prosel review, ale pri nasazeni neco prestalo fungovat.
+- Projekt obsahoval "malou zmenu", ktera rozbila vice casti aplikace.
+- Kazdy znal reseni problemu jen ve svem lokalnim prostredi.
+- Tym zjistil, ze komunikace je stejne dulezita jako kod.
