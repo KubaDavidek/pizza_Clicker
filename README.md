@@ -18,27 +18,42 @@ Poté otevřete prohlížeč na `http://localhost:5000`.
 
 ```
 pizzaclicker/
-├── index.html              # HTML struktura stránky
 ├── server.py               # Flask server (API + statické soubory)
+├── validation.py           # Validace vstupních dat API
+├── logging_config.py       # Nastavení logování serveru
 ├── requirements.txt        # Python závislosti
 ├── README.md               # Tento soubor
 ├── save.json               # Uložená hra (vznikne automaticky)
 ├── leaderboard.json        # Žebříček (vznikne automaticky)
-├── css/
-│   ├── base.css            # Základní styly a CSS proměnné
-│   ├── landing.css         # Přihlašovací obrazovka
-│   ├── game.css            # Herní plocha a topbar
-│   ├── shop.css            # Obchod s upgrady
-│   └── modals.css          # Modální okna (žebříček, reset)
-└── js/
-    ├── config.js           # Sdílená konfigurace, herní stav, UPGRADES
-    ├── landing.js          # Přihlášení a načtení hry
-    ├── game.js             # Herní smyčka, klikání, animace
-    ├── shop.js             # Obchod a nákup upgradů
-    ├── leaderboard.js      # Žebříček
-    ├── reset.js            # Reset hry
-    └── main.js             # Event listenery, propojení modulů
+├── public/
+│   ├── index.html          # HTML struktura stránky
+│   ├── css/
+│   │   ├── base.css        # Základní styly a CSS proměnné
+│   │   ├── landing.css     # Přihlašovací obrazovka
+│   │   ├── game.css        # Herní plocha a topbar
+│   │   ├── shop.css        # Obchod s upgrady
+│   │   └── modals.css      # Modální okna (žebříček, reset)
+│   └── js/
+│       ├── config.js       # Sdílená konfigurace, herní stav, UPGRADES
+│       ├── landing.js      # Přihlášení a načtení hry
+│       ├── game.js         # Herní smyčka, klikání, animace
+│       ├── shop.js         # Obchod a nákup upgradů
+│       ├── leaderboard.js  # Žebříček
+│       ├── reset.js        # Reset hry
+│       └── main.js         # Event listenery, propojení modulů
+└── __pycache__/            # Python cache (generováno automaticky)
 ```
+
+### Rozdělení složek podle odpovědnosti
+
+- Frontend UI: `public/index.html`
+- Frontend logika: `public/js/`
+- Styly a statické soubory: `public/css/`
+- Backend API: `server.py`, `validation.py`, `logging_config.py`
+- Závislosti: `requirements.txt`
+- Runtime data: `save.json`, `leaderboard.json`, `server.log`
+
+Tato struktura odděluje prezentační vrstvu (HTML/CSS), klientskou logiku (JS), serverovou logiku (Python API) a provozní data.
 
 ## API endpointy
 

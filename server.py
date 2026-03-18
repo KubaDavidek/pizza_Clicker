@@ -5,7 +5,7 @@ from werkzeug.exceptions import BadRequest, HTTPException
 from logging_config import configure_logging
 from validation import validate_leaderboard_payload, validate_save_payload
 
-app = Flask(__name__, static_folder='.')
+app = Flask(__name__, static_folder='public')
 
 SAVE_FILE = os.path.join(os.path.dirname(__file__), 'save.json')
 LEADERBOARD_FILE = os.path.join(os.path.dirname(__file__), 'leaderboard.json')
@@ -31,11 +31,11 @@ def get_json_body():
 
 @app.route('/')
 def index():
-    return send_from_directory('.', 'index.html')
+    return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/<path:path>')
 def static_files(path):
-    return send_from_directory('.', path)
+    return send_from_directory(app.static_folder, path)
 
 
 @app.route('/api/save', methods=['GET'])

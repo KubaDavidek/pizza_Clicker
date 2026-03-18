@@ -24,3 +24,5 @@
 18.3.2026 - David Pivoňka
     Opraveno vracení správných HTTP status kódů (200, 400, 404, 500)
     Doplněna dokumentace API endpointů do README
+    Vylepšeno API chování pro neplatné požadavky: vrací srozumitelné chybové zprávy
+    Upravena struktura projektu: frontend soubory přesunuty do složky public/ a backend tomu přizpůsoben
