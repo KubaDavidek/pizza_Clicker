@@ -13,7 +13,14 @@
 7.2.2026 - David Čadek
     Přidáno resetovací tlačítko + README
 
+16.3.2026 - David Pivoňka
+    Opraven bug se spacebarem (mezerník): bylo možné ho držet a tím vznikalo konstantní klikání s velkým přísunem pizzy
+
 18.3.2026 - Jakub Davídek 
     Přídání logování errorů
     Vypnutí debug modu
     Validace vstupu uživatele
+
+18.3.2026 - David Pivoňka
+    Opraveno vracení správných HTTP status kódů (200, 400, 404, 500)
+    Doplněna dokumentace API endpointů do README

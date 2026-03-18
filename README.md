@@ -40,6 +40,86 @@ pizzaclicker/
     └── main.js             # Event listenery, propojení modulů
 ```
 
+## API endpointy
+
+Základní URL: `http://localhost:5000`
+
+Všechny `POST` endpointy očekávají `Content-Type: application/json`.
+
+### GET /api/save
+- Popis: Vrátí uloženou hru.
+- Odpověď 200: uložený objekt hry nebo `null`, pokud soubor ještě neexistuje.
+
+### POST /api/save
+- Popis: Uloží stav hry.
+- Tělo požadavku (JSON objekt):
+
+```json
+{
+    "pizzeriaName": "Nazev pizzerie",
+    "money": 105,
+    "totalEarned": 155,
+    "clickValue": 2,
+    "upgrades": {
+        "c1": true
+    },
+    "lastSave": 1773848901086
+}
+```
+
+- Odpověď 200:
+
+```json
+{ "ok": true }
+```
+
+- Odpověď 400: nevalidní JSON nebo nevalidní data.
+
+### DELETE /api/save
+- Popis: Smaže uloženou hru (pokud existuje).
+- Odpověď 200:
+
+```json
+{ "ok": true }
+```
+
+### GET /api/leaderboard
+- Popis: Vrátí žebříček.
+- Odpověď 200: pole záznamů, nebo prázdné pole `[]`, pokud soubor ještě neexistuje.
+
+### POST /api/leaderboard
+- Popis: Uloží celý žebříček.
+- Tělo požadavku (JSON pole, max. 10 položek):
+
+```json
+[
+    {
+        "name": "kastani",
+        "pps": 0,
+        "total": 121
+    }
+]
+```
+
+- Odpověď 200:
+
+```json
+{ "ok": true }
+```
+
+- Odpověď 400: nevalidní JSON nebo nevalidní data.
+
+### Chybové odpovědi API
+- 400 Bad Request: nevalidní vstup (špatný formát, chybějící pole, neznámá pole, špatné typy, ne-JSON request).
+- 404 Not Found: neexistující API cesta.
+- 500 Internal Server Error: neočekávaná chyba serveru.
+
+Chyby na API vrací JSON ve formátu:
+
+```json
+{ "ok": false, "error": "Popis chyby" }
+```
+
 ## Nasazení na PythonAnywhere
 
 1. Nahrajte všechny soubory na PythonAnywhere (přes Files nebo Git)
