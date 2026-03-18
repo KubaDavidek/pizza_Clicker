@@ -18,7 +18,11 @@ def get_json_body():
     if not request.is_json:
         raise BadRequest('Request must use application/json content type.')
 
-    data = request.get_json()
+    try:
+        data = request.get_json()
+    except BadRequest as error:
+        raise BadRequest('Request body must contain valid JSON.') from error
+
     if data is None:
         raise BadRequest('Request body must contain valid JSON.')
 
