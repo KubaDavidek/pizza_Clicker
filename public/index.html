@@ -19,10 +19,31 @@
             <div class="landing-pizza">🍕</div>
             <h1 class="landing-title">Pizza Clicker</h1>
             <p class="landing-sub">Postav největší pizzové impérium!</p>
-            <div class="landing-form">
-                <input type="text" id="pizzeria-name" placeholder="Název tvé pizzerie..." maxlength="30" autocomplete="off">
-                <button id="start-game-btn" class="btn-start">Začít hrát →</button>
+            <div id="landing-loading" style="text-align:center; padding:24px 0; color:var(--text-muted)">
+                Načítání...
             </div>
+
+            <div id="auth-panel" style="display:none">
+                <div class="auth-tabs">
+                    <button id="tab-login"    class="auth-tab active">Přihlásit se</button>
+                    <button id="tab-register" class="auth-tab">Registrovat se</button>
+                </div>
+                <div class="landing-form">
+                    <input type="text"     id="auth-nickname" placeholder="Přezdívka (min. 3 znaky)..." maxlength="30"  autocomplete="username">
+                    <input type="password" id="auth-password" placeholder="Heslo (min. 6 znaků)..."     maxlength="128" autocomplete="current-password">
+                    <p id="auth-error" class="auth-error"></p>
+                    <button id="auth-submit-btn" class="btn-start">Přihlásit se →</button>
+                </div>
+            </div>
+
+            <div id="new-game-panel" style="display:none">
+                <p id="logged-in-label" style="margin-bottom:16px; font-size:.9rem; color:var(--text-muted)"></p>
+                <div class="landing-form">
+                    <input type="text" id="pizzeria-name" placeholder="Název tvé pizzerie..." maxlength="30" autocomplete="off">
+                    <button id="start-game-btn" class="btn-start">Začít hrát →</button>
+                </div>
+            </div>
+
             <p class="landing-hint">💾 Postup se ukládá automaticky</p>
         </div>
     </div>
@@ -60,6 +81,7 @@
             <div class="topbar-actions">
                 <button id="leaderboard-btn" class="tb-btn">🏅 Žebříček</button>
                 <button id="reset-btn" class="tb-btn tb-btn-danger">↺ Reset</button>
+                <button id="logout-btn" class="tb-btn">⏏ Odhlásit</button>
             </div>
         </header>
 
@@ -106,7 +128,7 @@
                     </thead>
                     <tbody id="leaderboard-body"></tbody>
                 </table>
-                <p class="lb-note">Lokální žebříček — uložen v tomto prohlížeči</p>
+                <p class="lb-note">Globální žebříček — top 10 hráčů</p>
             </div>
         </div>
     </div>

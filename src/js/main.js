@@ -12,23 +12,37 @@ document.addEventListener('DOMContentLoaded', () => {
         closeLeaderboard:'close-leaderboard', leaderboardBody:'leaderboard-body',
         resetBtn:'reset-btn',              resetModal:'reset-modal',
         closeReset:'close-reset',          confirmReset:'confirm-reset',
-        cancelReset:'cancel-reset'
+        cancelReset:'cancel-reset',
+        landingLoading:'landing-loading',
+        authPanel:'auth-panel',
+        tabLogin:'tab-login',              tabRegister:'tab-register',
+        authNickname:'auth-nickname',      authPassword:'auth-password',
+        authError:'auth-error',            authSubmitBtn:'auth-submit-btn',
+        newGamePanel:'new-game-panel',     loggedInLabel:'logged-in-label',
+        logoutBtn:'logout-btn',
     };
     Object.entries(ids).forEach(([k, v]) => el[k] = document.getElementById(v));
     el.shopTabs = document.querySelectorAll('.shop-tab');
 
-  
+
     el.startBtn.addEventListener('click', startGame);
     el.pizzeriaNameInput.addEventListener('keypress', e => e.key === 'Enter' && startGame());
 
- 
+    el.tabLogin.addEventListener('click',    () => switchAuthTab('login'));
+    el.tabRegister.addEventListener('click', () => switchAuthTab('register'));
+    el.authSubmitBtn.addEventListener('click', submitAuth);
+    el.authNickname.addEventListener('keypress', e => e.key === 'Enter' && el.authPassword.focus());
+    el.authPassword.addEventListener('keypress', e => e.key === 'Enter' && submitAuth());
+    el.logoutBtn.addEventListener('click', logoutUser);
+
+
     el.pizzaButton.addEventListener('click', handleClick);
     el.pizzaButton.addEventListener('mousedown', () => el.pizzaButton.classList.add('clicked'));
     ['mouseup', 'mouseleave'].forEach(ev => el.pizzaButton.addEventListener(ev, () => el.pizzaButton.classList.remove('clicked')));
     el.pizzaButton.addEventListener('touchstart', e => { e.preventDefault(); el.pizzaButton.classList.add('clicked'); handleClick(e); });
     el.pizzaButton.addEventListener('touchend', () => el.pizzaButton.classList.remove('clicked'));
 
- 
+
     el.shopTabs.forEach(tab => tab.addEventListener('click', () => {
         activeTab = tab.dataset.tab;
         el.shopTabs.forEach(t => t.classList.remove('active'));
@@ -40,18 +54,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn && !btn.disabled) buyUpgrade(btn.dataset.upgradeId);
     });
 
-   
+
     el.leaderboardBtn.addEventListener('click', openLeaderboard);
     el.closeLeaderboard.addEventListener('click', closeLeaderboard);
     el.leaderboardModal.addEventListener('click', e => e.target === el.leaderboardModal && closeLeaderboard());
 
- 
+
     el.resetBtn.addEventListener('click', () => el.resetModal.classList.add('active'));
     [el.closeReset, el.cancelReset].forEach(b => b.addEventListener('click', () => el.resetModal.classList.remove('active')));
     el.confirmReset.addEventListener('click', resetGame);
     el.resetModal.addEventListener('click', e => e.target === el.resetModal && el.resetModal.classList.remove('active'));
 
-    
+
     document.addEventListener('keydown', e => {
         if (e.code === 'Space' && !e.repeat && el.gameScreen.classList.contains('active')) {
             e.preventDefault();
@@ -60,5 +74,5 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.code === 'Escape') { closeLeaderboard(); el.resetModal.classList.remove('active'); }
     });
 
-    loadGame();
+    initAuth();
 });

@@ -116,3 +116,80 @@ def validate_upgrades(value):
         validated_upgrades[upgrade_id] = purchased
 
     return validated_upgrades
+
+
+NICKNAME_MIN_LEN = 3
+NICKNAME_MAX_LEN = 30
+PASSWORD_MIN_LEN = 6
+PASSWORD_MAX_LEN = 128
+
+
+def validate_register_payload(data):
+    if not isinstance(data, dict):
+        raise BadRequest('Request body must be a JSON object.')
+    allowed = {'nickname', 'password'}
+    unknown = set(data.keys()) - allowed
+    if unknown:
+        raise BadRequest(f'Unknown fields: {", ".join(sorted(unknown))}.')
+    missing = allowed - set(data.keys())
+    if missing:
+        raise BadRequest(f'Missing fields: {", ".join(sorted(missing))}.')
+    return {
+        'nickname': validate_nickname(data['nickname']),
+        'password': validate_password(data['password']),
+    }
+
+
+def validate_login_payload(data):
+    if not isinstance(data, dict):
+        raise BadRequest('Request body must be a JSON object.')
+    allowed = {'nickname', 'password'}
+    unknown = set(data.keys()) - allowed
+    if unknown:
+        raise BadRequest(f'Unknown fields: {", ".join(sorted(unknown))}.')
+    missing = allowed - set(data.keys())
+    if missing:
+        raise BadRequest(f'Missing fields: {", ".join(sorted(missing))}.')
+    return {
+        'nickname': validate_nickname(data['nickname']),
+        'password': validate_password(data['password']),
+    }
+
+
+def validate_nickname(value):
+    if not isinstance(value, str):
+        raise BadRequest('nickname must be a string.')
+    value = value.strip()
+    if len(value) < NICKNAME_MIN_LEN:
+        raise BadRequest(f'Nickname musí mít alespoň {NICKNAME_MIN_LEN} znaky.')
+    if len(value) > NICKNAME_MAX_LEN:
+        raise BadRequest(f'Nickname může mít nejvýše {NICKNAME_MAX_LEN} znaků.')
+    if value.isdigit():
+        raise BadRequest('Nickname nemůže obsahovat jen čísla.')
+    return value
+
+
+def validate_password(value):
+    if not isinstance(value, str):
+        raise BadRequest('password must be a string.')
+    if len(value) < PASSWORD_MIN_LEN:
+        raise BadRequest(f'Heslo musí mít alespoň {PASSWORD_MIN_LEN} znaků.')
+    if len(value) > PASSWORD_MAX_LEN:
+        raise BadRequest(f'Heslo může mít nejvýše {PASSWORD_MAX_LEN} znaků.')
+    return value
+
+
+def validate_leaderboard_post_payload(data):
+    if not isinstance(data, dict):
+        raise BadRequest('Leaderboard data must be a JSON object.')
+    allowed = {'pps', 'total'}
+    unknown = set(data.keys()) - allowed
+    if unknown:
+        raise BadRequest(f'Unknown fields: {", ".join(sorted(unknown))}.')
+    missing = allowed - set(data.keys())
+    if missing:
+        raise BadRequest(f'Missing fields: {", ".join(sorted(missing))}.')
+    return {
+        'pps': validate_number(data['pps'], 'pps', minimum=0),
+        'total': validate_number(data['total'], 'total', minimum=0),
+    }

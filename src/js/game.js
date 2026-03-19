@@ -82,5 +82,7 @@ function updateDisplay() {
 
 function saveGame() {
     gs.lastSave = Date.now();
-    fetch('/api/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(gs) });
+    fetch('/api/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(gs) })
+        .then(r => { if (r.status === 401) logoutUser(); })
+        .catch(() => {});
 }
