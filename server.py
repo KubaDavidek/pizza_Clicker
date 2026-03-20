@@ -73,6 +73,7 @@ with app.app_context():
     except Exception as e:
         import sys
         print(f'[STARTUP] db.create_all() failed: {e}', file=sys.stderr)
+        db.session.rollback()
 
 
 # --- Helpers ---
@@ -104,6 +105,12 @@ def require_auth():
 
 
 # --- Static routes ---
+
+@app.route('/debug-files')
+def debug_files():
+    import glob as _glob
+    files = _glob.glob(os.path.join(BASE_DIR, '**'), recursive=True)
+    return jsonify({'base_dir': BASE_DIR, 'files': files[:50]})
 
 @app.route('/')
 def index():
