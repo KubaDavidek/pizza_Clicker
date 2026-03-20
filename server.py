@@ -104,13 +104,7 @@ def require_auth():
     return user
 
 
-# --- Static routes ---
-
-@app.route('/debug-files')
-def debug_files():
-    import glob as _glob
-    files = _glob.glob(os.path.join(BASE_DIR, '**'), recursive=True)
-    return jsonify({'base_dir': BASE_DIR, 'files': files[:50]})
+# --- Static routes (only for local dev; Vercel serves these directly) ---
 
 @app.route('/')
 def index():
