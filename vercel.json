@@ -1,7 +1,13 @@
 {
   "version": 2,
   "builds": [
-    { "src": "server.py", "use": "@vercel/python" }
+    {
+      "src": "server.py",
+      "use": "@vercel/python",
+      "config": {
+        "includeFiles": ["public/**", "src/**", "validation.py", "logging_config.py"]
+      }
+    }
   ],
   "routes": [
     { "src": "/(.*)", "dest": "server.py" }
