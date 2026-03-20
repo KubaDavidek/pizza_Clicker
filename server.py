@@ -68,7 +68,11 @@ class LeaderboardEntry(db.Model):
 
 
 with app.app_context():
-    db.create_all()
+    try:
+        db.create_all()
+    except Exception as e:
+        import sys
+        print(f'[STARTUP] db.create_all() failed: {e}', file=sys.stderr)
 
 
 # --- Helpers ---
