@@ -5,7 +5,7 @@
       "src": "server.py",
       "use": "@vercel/python",
       "config": {
-        "includeFiles": ["public/**", "src/**", "validation.py", "logging_config.py"]
+        "includeFiles": ["public/**", "public/*", "src/**", "src/css/*", "src/js/*", "validation.py", "logging_config.py"]
       }
     }
   ],
