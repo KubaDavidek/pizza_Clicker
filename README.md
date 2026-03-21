@@ -14,6 +14,14 @@ py server.py
 ```
 Poté otevřete prohlížeč na `http://localhost:5000`.
 
+## Závislosti
+
+Projekt používá `pip` jako správce balíčků. Všechny závislosti jsou uvedeny v `requirements.txt` s přesnými verzemi.
+Soubor `requirements.lock` obsahuje kompletní strom závislostí včetně transitivních balíčků pro 100% reprodukovatelné prostředí.
+
+Tým průběžně kontroluje dostupné aktualizace závislostí a při každém updatu ověřuje kompatibilitu a bezpečnostní záplaty před nasazením do produkce.
+
+
 ## Struktura projektu
 
 ```

@@ -1,5 +1,14 @@
+# Web framework – HTTP server, routing, session management
 flask==3.1.3
+
+# ORM – databázové modely a dotazy bez surového SQL
 flask-sqlalchemy==3.1.1
+
+# PostgreSQL driver – připojení k produkční databázi (Supabase)
 psycopg2-binary==2.9.11
+
+# Načítání .env proměnných (SECRET_KEY, DATABASE_URL)
 python-dotenv==1.2.1
+
+# Součást Flasku – hashování hesel, HTTP výjimky
 werkzeug==3.1.6
