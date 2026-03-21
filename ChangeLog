@@ -26,3 +26,9 @@
     Doplněna dokumentace API endpointů do README
     Vylepšeno API chování pro neplatné požadavky: vrací srozumitelné chybové zprávy
     Upravena struktura projektu: frontend soubory přesunuty do složky public/ a backend tomu přizpůsoben
+
+20.3.2026 - Jiří Janoušek
+    Nasazeno na internet (Vercel)
+    Opraveno přihlašování a registrace
+    Připojeno k databázi
+

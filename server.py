@@ -22,6 +22,10 @@ app = Flask(__name__, static_folder=None)
 
 app.secret_key = os.getenv('SECRET_KEY', 'dev-only-change-this')
 
+app.config['SESSION_COOKIE_SECURE']   = True 
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
 _db_url = os.getenv('DATABASE_URL', f'sqlite:///{os.path.join(BASE_DIR, "pizza_clicker.db")}')
 if _db_url.startswith('postgres://'):
     _db_url = _db_url.replace('postgres://', 'postgresql://', 1)
