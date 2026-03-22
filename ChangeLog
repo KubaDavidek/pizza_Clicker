@@ -32,3 +32,11 @@
     Opraveno přihlašování a registrace
     Připojeno k databázi
 
+21.3.2026 - David Čadek
+    Web podstoupil kontrolu podle OWASP Top 10
+    CSRF ochrana
+    Cookies Secure a HttpOnly
+    Přidal jsem requirements.lock a req komenty
+    
+
+

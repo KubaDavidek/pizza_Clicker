@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from flask import Flask, request, jsonify, send_from_directory, session
+from flask_compress import Compress
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.pool import NullPool
 from werkzeug.exceptions import BadRequest, Unauthorized, Conflict, HTTPException
@@ -19,6 +20,7 @@ from validation import (
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__, static_folder=None)
+Compress(app)
 
 app.secret_key = os.getenv('SECRET_KEY', 'dev-only-change-this')
 
@@ -237,7 +239,18 @@ def post_leaderboard():
     return jsonify({'ok': True})
 
 
-# --- Error handlers ---
+# --- Stats endpoint ---
+
+@app.route('/api/stats', methods=['GET'])
+def get_stats():
+    registered_users = db.session.query(db.func.count(User.id)).scalar()
+    active_saves     = db.session.query(db.func.count(Save.id)).scalar()
+    return jsonify({
+        'registered_users': registered_users,
+        'active_saves':     active_saves,
+    })
+
+
 
 @app.errorhandler(HTTPException)
 def handle_http_error(error):

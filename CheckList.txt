@@ -51,13 +51,13 @@ SEO & Accesibility
 - Stranka je pouzitelna na mobilnich zarizenich.
 
 Security
-- Vsechny vstupy uzivatele jsou validovany.
-- Aplikace je chranena proti XSS (Cross Site Scripting).
-- Aplikace je chranena proti CSRF (Cross Site Request Forgery).
-- Databazove dotazy pouzivaji parametrizovane dotazy.
-- Server neprijima neplatna nebo neuplna data.
-- Cookies maji nastavene atributy Secure a HttpOnly.
-- Byla provedena kontrola podle OWASP Top 10.
+- Vsechny vstupy uzivatele jsou validovany.  - HOTOVO
+- Aplikace je chranena proti XSS (Cross Site Scripting). - HOTOVO
+- Aplikace je chranena proti CSRF (Cross Site Request Forgery). - HOTOVO
+- Databazove dotazy pouzivaji parametrizovane dotazy. - HOTOVO
+- Server neprijima neplatna nebo neuplna data. - HOTOVO
+- Cookies maji nastavene atributy Secure a HttpOnly. - HOTOVO
+- Byla provedena kontrola podle OWASP Top 10. - HOTOVO
 
 Testing
 - Aplikace byla otestovana v nekolika prohlizecich.
