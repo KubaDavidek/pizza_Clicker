@@ -1,3 +1,6 @@
+2.2.2026 - Michal Němec
+    Analýza, Návrh a Game concept
+
 3.2.2026 - Jakub Davídek
     Založení projektu, vytvoření struktury projektu
 
@@ -53,3 +56,9 @@
     Brute-force ochrana přihlášení (max 10 pokusů/min na IP)
     Session expirace (permanent session, platnost 30 dní)
     Opravení responzivity na mobil
+
+22.3.2026 - Michal Němec
+    Testovací scénáře 01-03
+    Testovací reporty 01-03
+    Unit testy
+    sql script
