@@ -28,7 +28,7 @@ const UPGRADES = [
 ];
 
 
-let gs = { pizzeriaName: 'Moje Pizzerie', money: 0, totalEarned: 0, clickValue: 1, upgrades: {}, lastSave: Date.now(), earnedAchievements: {}, totalClicks: 0 };
+let gs = { pizzeriaName: 'Moje Pizzerie', money: 0, totalEarned: 0, clickValue: 1, upgrades: {}, lastSave: Date.now(), earnedAchievements: {}, totalClicks: 0, streak: 0, lastLoginDate: null };
 const el = {};
 let activeTab = 'click';
 let autoSave, gameLoop, lastUnlockCount = 0;

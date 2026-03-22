@@ -3,12 +3,12 @@ from werkzeug.exceptions import BadRequest
 
 
 ALLOWED_SAVE_KEYS = {'pizzeriaName', 'money', 'totalEarned', 'clickValue', 'upgrades', 'lastSave',
-                     'earnedAchievements', 'totalClicks'}
+                     'earnedAchievements', 'totalClicks', 'streak', 'lastLoginDate'}
 ALLOWED_UPGRADE_IDS = {
     'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12',
     'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'
 }
-ALLOWED_ACHIEVEMENT_IDS = {f'a{i}' for i in range(1, 16)}
+ALLOWED_ACHIEVEMENT_IDS = {f'a{i}' for i in range(1, 19)}
 
 
 def validate_save_payload(data):
@@ -31,6 +31,8 @@ def validate_save_payload(data):
     last_save = validate_number(data.get('lastSave'), 'lastSave', minimum=0, integer_only=True)
     earned_achievements = validate_earned_achievements(data.get('earnedAchievements'))
     total_clicks = validate_number(data.get('totalClicks'), 'totalClicks', minimum=0, integer_only=True)
+    streak = validate_number(data.get('streak'), 'streak', minimum=0, integer_only=True)
+    last_login_date = validate_last_login_date(data.get('lastLoginDate'))
 
     return {
         'pizzeriaName': pizzeria_name,
@@ -41,6 +43,8 @@ def validate_save_payload(data):
         'lastSave': last_save,
         'earnedAchievements': earned_achievements,
         'totalClicks': total_clicks,
+        'streak': streak,
+        'lastLoginDate': last_login_date,
     }
 
 
@@ -122,6 +126,19 @@ def validate_upgrades(value):
         validated_upgrades[upgrade_id] = purchased
 
     return validated_upgrades
+
+
+import re as _re
+
+
+def validate_last_login_date(value):
+    if value is None:
+        return None
+    if not isinstance(value, str):
+        raise BadRequest('lastLoginDate must be a string or null.')
+    if not _re.fullmatch(r'\d{4}-\d{2}-\d{2}', value):
+        raise BadRequest('lastLoginDate must be in YYYY-MM-DD format.')
+    return value
 
 
 def validate_earned_achievements(value):

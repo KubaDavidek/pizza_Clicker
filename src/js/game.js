@@ -81,6 +81,7 @@ function updateDisplay() {
     el.ppsDisplay.textContent = `${formatNumber(calculatePPS())} €/s`;
     el.totalDisplay.textContent = `${formatNumber(Math.floor(gs.totalEarned))} €`;
     el.clickValueDisplay.textContent = `${formatNumber(gs.clickValue)} €`;
+    el.streakDisplay.textContent = `🔥 ${gs.streak || 0}`;
     document.title = `${formatNumber(Math.floor(gs.money))} € — Pizza Clicker 🍕`;
     el.shopList.querySelectorAll('.item-buy-btn[data-upgrade-id]').forEach(btn => {
         const u = UPGRADES.find(u => u.id === btn.dataset.upgradeId);

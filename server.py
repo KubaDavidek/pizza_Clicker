@@ -206,6 +206,8 @@ def get_save():
         'lastSave':     s.last_save,
         'earnedAchievements': extra.get('earnedAchievements', {}),
         'totalClicks':  extra.get('totalClicks', 0),
+        'streak':       extra.get('streak', 0),
+        'lastLoginDate': extra.get('lastLoginDate', None),
     })
 
 
@@ -227,6 +229,8 @@ def post_save():
     s.extra_data    = json.dumps({
         'earnedAchievements': save_data['earnedAchievements'],
         'totalClicks':        save_data['totalClicks'],
+        'streak':             save_data['streak'],
+        'lastLoginDate':      save_data['lastLoginDate'],
     })
     db.session.commit()
     return jsonify({'ok': True})

@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         achievementsBtn:'achievements-btn',    achievementsModal:'achievements-modal',
         closeAchievements:'close-achievements', achievementsCount:'achievements-count',
         achievementsList:'achievements-list',
+        streakDisplay:'streak-display',
     };
     Object.entries(ids).forEach(([k, v]) => el[k] = document.getElementById(v));
     el.shopTabs = document.querySelectorAll('.shop-tab');

@@ -14,6 +14,9 @@ const ACHIEVEMENTS = [
     { id:'a13', icon:'⚡', name:'Rychlá pizzerie',   desc:'Dosáhni produkce 1 000 €/s',           check: () => calculatePPS() >= 1e3 },
     { id:'a14', icon:'🌟', name:'Perfekcionista',    desc:'Kup všechny upgrady',                  check: () => _achUpgradeCount() >= UPGRADES.length },
     { id:'a15', icon:'👑', name:'Král pizzy',        desc:'Vydělej celkem 1 Q €',                 check: () => gs.totalEarned >= 1e15 },
+    { id:'a16', icon:'🔥', name:'Pravidelník',        desc:'Přihlas se 3 dny za sebou',             check: () => gs.streak >= 3 },
+    { id:'a17', icon:'🗓️', name:'Věrný zákazník',    desc:'Přihlas se 7 dní za sebou',             check: () => gs.streak >= 7 },
+    { id:'a18', icon:'💫', name:'Pizzový fanatik',    desc:'Přihlas se 30 dní za sebou',            check: () => gs.streak >= 30 },
 ];
 
 function _achUpgradeCount() {

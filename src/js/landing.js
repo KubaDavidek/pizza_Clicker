@@ -85,7 +85,10 @@ async function afterAuth() {
         if (!gs.upgrades) gs.upgrades = {};
         if (!gs.earnedAchievements) gs.earnedAchievements = {};
         if (gs.totalClicks === undefined) gs.totalClicks = 0;
+        if (gs.streak === undefined) gs.streak = 0;
+        if (gs.lastLoginDate === undefined) gs.lastLoginDate = null;
         if (/^\d+$/.test(gs.pizzeriaName)) gs.pizzeriaName = 'Moje Pizzerie';
+        const streakIncreased = _updateStreak();
         el.landingScreen.classList.remove('active');
         el.gameScreen.classList.add('active');
         initGame();
@@ -94,6 +97,10 @@ async function afterAuth() {
             updateDisplay();
             saveGame();
             showOfflineToast(offline.earned, offline.awaySecs);
+        }
+        if (streakIncreased) {
+            checkAchievements();
+            setTimeout(() => _showStreakToast(gs.streak), offline ? 4500 : 0);
         }
     } else {
         showNewGamePanel();
@@ -132,6 +139,38 @@ function startGame() {
     el.landingScreen.classList.remove('active');
     el.gameScreen.classList.add('active');
     initGame();
+}
+
+
+// ─── Denní streak ────────────────────────────────────────────────────────────
+
+function _updateStreak() {
+    const today = new Date().toISOString().slice(0, 10);
+    if (!gs.lastLoginDate) {
+        gs.streak = 1; gs.lastLoginDate = today; return false;
+    }
+    if (gs.lastLoginDate === today) return false;
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    if (gs.lastLoginDate === yesterday) {
+        gs.streak = (gs.streak || 0) + 1;
+        gs.lastLoginDate = today;
+        return true;
+    }
+    gs.streak = 1; gs.lastLoginDate = today; return false;
+}
+
+function _showStreakToast(streak) {
+    const toast = document.createElement('div');
+    toast.className = 'achievement-toast streak-toast';
+    toast.innerHTML =
+        `<span class="ach-toast-icon">🔥</span>` +
+        `<div class="ach-toast-text">` +
+        `<div class="ach-toast-label">Denní streak!</div>` +
+        `<div class="ach-toast-name">${streak} dní v řadě ✨</div>` +
+        `</div>`;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); }, 4500);
 }
 
 

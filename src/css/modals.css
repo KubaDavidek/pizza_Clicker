@@ -297,6 +297,9 @@
 .offline-toast { border-color: #059669; }
 .offline-toast .ach-toast-label { color: #059669; }
 
+.streak-toast { border-color: #f39c12; bottom: 100px; }
+.streak-toast .ach-toast-label { color: #f39c12; }
+
 .ach-toast-icon { font-size: 2rem; flex-shrink: 0; }
 
 .ach-toast-label {
