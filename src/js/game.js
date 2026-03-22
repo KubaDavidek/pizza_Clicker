@@ -21,7 +21,15 @@ function initGame() {
     }, CONFIG.TICK_INTERVAL);
 }
 
+const _clickTimes = [];
+const MAX_CPS = 30;
+
 function handleClick(e) {
+    const now = Date.now();
+    while (_clickTimes.length && now - _clickTimes[0] > 1000) _clickTimes.shift();
+    if (_clickTimes.length >= MAX_CPS) return;
+    _clickTimes.push(now);
+
     gs.money += gs.clickValue;
     gs.totalEarned += gs.clickValue;
     spawnFloat(e, gs.clickValue);

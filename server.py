@@ -1,5 +1,7 @@
 import json
 import os
+import time
+from collections import defaultdict, deque
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -41,7 +43,7 @@ db = SQLAlchemy(app)
 configure_logging(app)
 
 
-# --- Models ---
+
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -83,7 +85,7 @@ with app.app_context():
         db.session.rollback()
 
 
-# --- Helpers ---
+
 
 def get_json_body():
     if not request.is_json:
@@ -111,8 +113,6 @@ def require_auth():
     return user
 
 
-# --- Static routes (only for local dev; Vercel serves these directly) ---
-
 @app.route('/')
 def index():
     return send_from_directory(os.path.join(BASE_DIR, 'public'), 'index.html')
@@ -129,8 +129,6 @@ def js_files(path):
 def static_files(path):
     return send_from_directory(os.path.join(BASE_DIR, 'public'), path)
 
-
-# --- Auth endpoints ---
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -171,7 +169,19 @@ def me():
     return jsonify({'ok': True, 'user': {'id': user.id, 'nickname': user.nickname}})
 
 
-# --- Save endpoints ---
+_save_buckets: dict = defaultdict(deque)  
+_SAVE_RATE_LIMIT = 35  
+_SAVE_RATE_WINDOW = 1.0
+
+def _check_save_rate(user_id):
+    now = time.monotonic()
+    bucket = _save_buckets[user_id]
+    cutoff = now - _SAVE_RATE_WINDOW
+    while bucket and bucket[0] < cutoff:
+        bucket.popleft()
+    if len(bucket) >= _SAVE_RATE_LIMIT:
+        raise Forbidden('Příliš mnoho požadavků. Zpomal prosím.')
+    bucket.append(now)
 
 @app.route('/api/save', methods=['GET'])
 def get_save():
@@ -192,6 +202,7 @@ def get_save():
 @app.route('/api/save', methods=['POST'])
 def post_save():
     user = require_auth()
+    _check_save_rate(user.id)
     save_data = validate_save_payload(get_json_body())
     s = user.save
     if not s:
@@ -216,8 +227,6 @@ def delete_save():
     return jsonify({'ok': True})
 
 
-# --- Leaderboard endpoints ---
-
 @app.route('/api/leaderboard', methods=['GET'])
 def get_leaderboard():
     entries = LeaderboardEntry.query.order_by(LeaderboardEntry.total.desc()).limit(10).all()
@@ -240,7 +249,6 @@ def post_leaderboard():
     return jsonify({'ok': True})
 
 
-# --- Stats endpoint ---
 
 @app.route('/api/stats', methods=['GET'])
 def get_stats():
@@ -252,7 +260,6 @@ def get_stats():
     })
 
 
-# --- Profile endpoints ---
 
 @app.route('/api/profile', methods=['GET'])
 def get_profile():

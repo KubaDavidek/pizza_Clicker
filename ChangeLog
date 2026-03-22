@@ -44,3 +44,6 @@
     Přidáno API pro získávání statistik (api/stats)
     GZIP komprese API odpovědí
     Přídána manipulace s profilem (změna hesla, smazání účtu)
+
+22.3.2026 - Jakub Davídek
+    Ochrana protoi autoclickeru (podvodu), max CPS je 30 
