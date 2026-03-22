@@ -18,6 +18,7 @@ function initGame() {
         }
         const u = getUnlockCount();
         if (u !== lastUnlockCount) { lastUnlockCount = u; renderShop(); }
+        checkAchievements();
     }, CONFIG.TICK_INTERVAL);
 }
 
@@ -32,11 +33,13 @@ function handleClick(e) {
 
     gs.money += gs.clickValue;
     gs.totalEarned += gs.clickValue;
+    gs.totalClicks++;
     spawnFloat(e, gs.clickValue);
     spawnParticles(e);
     const u = getUnlockCount();
     if (u !== lastUnlockCount) { lastUnlockCount = u; renderShop(); }
     updateDisplay();
+    checkAchievements();
     saveGame();
 }
 

@@ -28,4 +28,5 @@ function buyUpgrade(id) {
     updateDisplay();
     renderShop();
     saveGame();
+    checkAchievements();
 }

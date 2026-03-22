@@ -65,6 +65,7 @@ class Save(db.Model):
     click_value   = db.Column(db.Float, nullable=False, default=1)
     upgrades      = db.Column(db.Text, nullable=False, default='{}')
     last_save     = db.Column(db.BigInteger, nullable=False, default=0)
+    extra_data    = db.Column(db.Text, nullable=True, default='{}')
 
 
 class LeaderboardEntry(db.Model):
@@ -83,6 +84,12 @@ with app.app_context():
         import sys
         print(f'[STARTUP] db.create_all() failed: {e}', file=sys.stderr)
         db.session.rollback()
+    try:
+        with db.engine.connect() as _conn:
+            _conn.execute(db.text("ALTER TABLE saves ADD COLUMN extra_data TEXT DEFAULT '{}'"))
+            _conn.commit()
+    except Exception:
+        pass  # column already exists or table not yet created
 
 
 
@@ -189,6 +196,7 @@ def get_save():
     s = user.save
     if not s:
         return jsonify(None)
+    extra = json.loads(s.extra_data or '{}')
     return jsonify({
         'pizzeriaName': s.pizzeria_name,
         'money':        s.money,
@@ -196,6 +204,8 @@ def get_save():
         'clickValue':   s.click_value,
         'upgrades':     json.loads(s.upgrades),
         'lastSave':     s.last_save,
+        'earnedAchievements': extra.get('earnedAchievements', {}),
+        'totalClicks':  extra.get('totalClicks', 0),
     })
 
 
@@ -214,6 +224,10 @@ def post_save():
     s.click_value   = save_data['clickValue']
     s.upgrades      = json.dumps(save_data['upgrades'])
     s.last_save     = save_data['lastSave']
+    s.extra_data    = json.dumps({
+        'earnedAchievements': save_data['earnedAchievements'],
+        'totalClicks':        save_data['totalClicks'],
+    })
     db.session.commit()
     return jsonify({'ok': True})
 

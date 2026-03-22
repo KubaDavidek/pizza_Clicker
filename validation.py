@@ -2,11 +2,13 @@ import math
 from werkzeug.exceptions import BadRequest
 
 
-ALLOWED_SAVE_KEYS = {'pizzeriaName', 'money', 'totalEarned', 'clickValue', 'upgrades', 'lastSave'}
+ALLOWED_SAVE_KEYS = {'pizzeriaName', 'money', 'totalEarned', 'clickValue', 'upgrades', 'lastSave',
+                     'earnedAchievements', 'totalClicks'}
 ALLOWED_UPGRADE_IDS = {
     'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12',
     'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'
 }
+ALLOWED_ACHIEVEMENT_IDS = {f'a{i}' for i in range(1, 16)}
 
 
 def validate_save_payload(data):
@@ -27,6 +29,8 @@ def validate_save_payload(data):
     click_value = validate_number(data.get('clickValue'), 'clickValue', minimum=1)
     upgrades = validate_upgrades(data.get('upgrades'))
     last_save = validate_number(data.get('lastSave'), 'lastSave', minimum=0, integer_only=True)
+    earned_achievements = validate_earned_achievements(data.get('earnedAchievements'))
+    total_clicks = validate_number(data.get('totalClicks'), 'totalClicks', minimum=0, integer_only=True)
 
     return {
         'pizzeriaName': pizzeria_name,
@@ -35,6 +39,8 @@ def validate_save_payload(data):
         'clickValue': click_value,
         'upgrades': upgrades,
         'lastSave': last_save,
+        'earnedAchievements': earned_achievements,
+        'totalClicks': total_clicks,
     }
 
 
@@ -116,6 +122,21 @@ def validate_upgrades(value):
         validated_upgrades[upgrade_id] = purchased
 
     return validated_upgrades
+
+
+def validate_earned_achievements(value):
+    if not isinstance(value, dict):
+        raise BadRequest('earnedAchievements must be an object.')
+
+    validated = {}
+    for ach_id, earned in value.items():
+        if ach_id not in ALLOWED_ACHIEVEMENT_IDS:
+            raise BadRequest(f'Unknown achievement id: {ach_id}.')
+        if not isinstance(earned, bool):
+            raise BadRequest(f'Achievement {ach_id} must be true or false.')
+        validated[ach_id] = earned
+
+    return validated
 
 
 NICKNAME_MIN_LEN = 3

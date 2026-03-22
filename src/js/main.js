@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
         profileOldPw:'profile-old-pw',      profileNewPw:'profile-new-pw',
         profileSavePw:'profile-save-pw',    profilePwMsg:'profile-pw-msg',
         profileDeleteBtn:'profile-delete-btn',
+        achievementsBtn:'achievements-btn',    achievementsModal:'achievements-modal',
+        closeAchievements:'close-achievements', achievementsCount:'achievements-count',
+        achievementsList:'achievements-list',
     };
     Object.entries(ids).forEach(([k, v]) => el[k] = document.getElementById(v));
     el.shopTabs = document.querySelectorAll('.shop-tab');
@@ -80,13 +83,17 @@ document.addEventListener('DOMContentLoaded', () => {
     el.profileDeleteBtn.addEventListener('click', deleteAccount);
     el.profileNewPw.addEventListener('keypress', e => e.key === 'Enter' && changePassword());
 
+    el.achievementsBtn.addEventListener('click', openAchievements);
+    el.closeAchievements.addEventListener('click', closeAchievements);
+    el.achievementsModal.addEventListener('click', e => e.target === el.achievementsModal && closeAchievements());
+
 
     document.addEventListener('keydown', e => {
         if (e.code === 'Space' && !e.repeat && el.gameScreen.classList.contains('active')) {
             e.preventDefault();
             handleClick({ clientX: innerWidth / 2, clientY: innerHeight / 2 });
         }
-        if (e.code === 'Escape') { closeLeaderboard(); el.resetModal.classList.remove('active'); closeProfile(); }
+        if (e.code === 'Escape') { closeLeaderboard(); el.resetModal.classList.remove('active'); closeProfile(); closeAchievements(); }
     });
 
     initAuth();

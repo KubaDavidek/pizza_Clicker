@@ -83,6 +83,8 @@ async function afterAuth() {
     if (saved) {
         gs = { ...gs, ...saved };
         if (!gs.upgrades) gs.upgrades = {};
+        if (!gs.earnedAchievements) gs.earnedAchievements = {};
+        if (gs.totalClicks === undefined) gs.totalClicks = 0;
         if (/^\d+$/.test(gs.pizzeriaName)) gs.pizzeriaName = 'Moje Pizzerie';
         el.landingScreen.classList.remove('active');
         el.gameScreen.classList.add('active');
@@ -119,6 +121,7 @@ function startGame() {
         pizzeriaName: name || 'Moje Pizzerie',
         money: 0, totalEarned: 0, clickValue: 1,
         upgrades: {}, lastSave: Date.now(),
+        earnedAchievements: {}, totalClicks: 0,
     };
     el.landingScreen.classList.remove('active');
     el.gameScreen.classList.add('active');
@@ -133,7 +136,7 @@ async function logoutUser() {
     currentUser = null;
     clearInterval(autoSave);
     clearInterval(gameLoop);
-    gs = { pizzeriaName: 'Moje Pizzerie', money: 0, totalEarned: 0, clickValue: 1, upgrades: {}, lastSave: Date.now() };
+    gs = { pizzeriaName: 'Moje Pizzerie', money: 0, totalEarned: 0, clickValue: 1, upgrades: {}, lastSave: Date.now(), earnedAchievements: {}, totalClicks: 0 };
     el.gameScreen.classList.remove('active');
     el.newGamePanel.style.display   = 'none';
     el.authPanel.style.display      = 'block';
