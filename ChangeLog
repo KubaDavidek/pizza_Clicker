@@ -50,3 +50,5 @@
     Přidání achievementů pro lepší herní zážitek
     Přidání offline výdělku na max 8 hodin
     Denní streak systém
+    Brute-force ochrana přihlášení (max 10 pokusů/min na IP)
+    Session expirace (permanent session, platnost 30 dní)

@@ -2,6 +2,7 @@ import json
 import os
 import time
 from collections import defaultdict, deque
+from datetime import timedelta
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -27,9 +28,11 @@ Compress(app)
 
 app.secret_key = os.getenv('SECRET_KEY', 'dev-only-change-this')
 
-app.config['SESSION_COOKIE_SECURE']   = True 
-app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_SECURE']    = True
+app.config['SESSION_COOKIE_HTTPONLY']  = True
+app.config['SESSION_COOKIE_SAMESITE']  = 'Lax'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=30)
+app.config['SESSION_REFRESH_EACH_REQUEST'] = True
 
 _db_url = os.getenv('DATABASE_URL', f'sqlite:///{os.path.join(BASE_DIR, "pizza_clicker.db")}')
 if _db_url.startswith('postgres://'):
@@ -139,6 +142,7 @@ def static_files(path):
 
 @app.route('/api/register', methods=['POST'])
 def register():
+    _check_login_rate()
     data = validate_register_payload(get_json_body())
     if User.query.filter_by(nickname=data['nickname']).first():
         raise Conflict('Tato přezdívka je již obsazena.')
@@ -148,16 +152,19 @@ def register():
     )
     db.session.add(user)
     db.session.commit()
+    session.permanent = True
     session['user_id'] = user.id
     return jsonify({'ok': True, 'user': {'id': user.id, 'nickname': user.nickname}})
 
 
 @app.route('/api/login', methods=['POST'])
 def login():
+    _check_login_rate()
     data = validate_login_payload(get_json_body())
     user = User.query.filter_by(nickname=data['nickname']).first()
     if not user or not check_password_hash(user.password_hash, data['password']):
         raise Unauthorized('Špatná přezdívka nebo heslo.')
+    session.permanent = True
     session['user_id'] = user.id
     return jsonify({'ok': True, 'user': {'id': user.id, 'nickname': user.nickname}})
 
@@ -188,6 +195,23 @@ def _check_save_rate(user_id):
         bucket.popleft()
     if len(bucket) >= _SAVE_RATE_LIMIT:
         raise Forbidden('Příliš mnoho požadavků. Zpomal prosím.')
+    bucket.append(now)
+
+
+# --- Brute-force ochrana loginu ---
+_login_buckets: dict = defaultdict(deque)  # IP -> deque of monotonic timestamps
+_LOGIN_RATE_LIMIT  = 10   # max pokusů
+_LOGIN_RATE_WINDOW = 60.0 # za 60 sekund
+
+def _check_login_rate():
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr or '').split(',')[0].strip()
+    now = time.monotonic()
+    bucket = _login_buckets[ip]
+    cutoff = now - _LOGIN_RATE_WINDOW
+    while bucket and bucket[0] < cutoff:
+        bucket.popleft()
+    if len(bucket) >= _LOGIN_RATE_LIMIT:
+        raise Forbidden('Příliš mnoho pokusů o přihlášení. Zkus to znovu za minutu.')
     bucket.append(now)
 
 @app.route('/api/save', methods=['GET'])
