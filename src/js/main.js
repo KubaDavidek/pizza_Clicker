@@ -31,6 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
         closeAchievements:'close-achievements', achievementsCount:'achievements-count',
         achievementsList:'achievements-list',
         streakDisplay:'streak-display',
+        prestigeDisplay:'prestige-display',    prestigeBtn:'prestige-btn',
+        prestigeModal:'prestige-modal',        closePrestige:'close-prestige',
+        cancelPrestige:'cancel-prestige',      prestigeConfirmBtn:'prestige-confirm-btn',
+        prestigeCurrentLevel:'prestige-current-level', prestigeNextMult:'prestige-next-mult',
+        prestigeThresholdVal:'prestige-threshold-val', prestigeCurrentEarned:'prestige-current-earned',
+        prestigeProgressFill:'prestige-progress-fill', prestigeNotReady:'prestige-not-ready',
     };
     Object.entries(ids).forEach(([k, v]) => el[k] = document.getElementById(v));
     el.shopTabs = document.querySelectorAll('.shop-tab');
@@ -88,13 +94,19 @@ document.addEventListener('DOMContentLoaded', () => {
     el.closeAchievements.addEventListener('click', closeAchievements);
     el.achievementsModal.addEventListener('click', e => e.target === el.achievementsModal && closeAchievements());
 
+    el.prestigeBtn.addEventListener('click', openPrestige);
+    el.closePrestige.addEventListener('click', closePrestige);
+    el.cancelPrestige.addEventListener('click', closePrestige);
+    el.prestigeModal.addEventListener('click', e => e.target === el.prestigeModal && closePrestige());
+    el.prestigeConfirmBtn.addEventListener('click', doPrestige);
+
 
     document.addEventListener('keydown', e => {
         if (e.code === 'Space' && !e.repeat && el.gameScreen.classList.contains('active')) {
             e.preventDefault();
             handleClick({ clientX: innerWidth / 2, clientY: innerHeight / 2 });
         }
-        if (e.code === 'Escape') { closeLeaderboard(); el.resetModal.classList.remove('active'); closeProfile(); closeAchievements(); }
+        if (e.code === 'Escape') { closeLeaderboard(); el.resetModal.classList.remove('active'); closeProfile(); closeAchievements(); closePrestige(); }
     });
 
     initAuth();

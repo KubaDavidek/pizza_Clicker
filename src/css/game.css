@@ -51,6 +51,7 @@
 .ts-value.green  { color: #6EE7B7; }
 .ts-value.amber  { color: #FCD34D; }
 .ts-value.purple { color: #C4B5FD; }
+.ts-value.prestige-color { color: #FCD34D; }
 
 .ts-divider { width: 1px; height: 28px; background: rgba(255,255,255,.15); flex-shrink: 0; }
 
@@ -72,6 +73,19 @@
 
 .tb-btn:hover        { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.4); }
 .tb-btn-danger:hover { background: rgba(196,30,58,.5);    border-color: var(--red); }
+
+.tb-btn-prestige { border-color: rgba(212,160,23,.6); color: #FCD34D; }
+.tb-btn-prestige:hover { background: rgba(212,160,23,.2); border-color: var(--gold); }
+.tb-btn-prestige.prestige-ready {
+    border-color: var(--gold);
+    color: #FCD34D;
+    animation: prestigePulse 1.8s ease-in-out infinite;
+}
+
+@keyframes prestigePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(212,160,23,0); }
+    50%       { box-shadow: 0 0 10px 3px rgba(212,160,23,.45); }
+}
 
 #game-screen {
     height: 100vh;

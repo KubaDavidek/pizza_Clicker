@@ -17,6 +17,9 @@ const ACHIEVEMENTS = [
     { id:'a16', icon:'🔥', name:'Pravidelník',        desc:'Přihlas se 3 dny za sebou',             check: () => gs.streak >= 3 },
     { id:'a17', icon:'🗓️', name:'Věrný zákazník',    desc:'Přihlas se 7 dní za sebou',             check: () => gs.streak >= 7 },
     { id:'a18', icon:'💫', name:'Pizzový fanatik',    desc:'Přihlas se 30 dní za sebou',            check: () => gs.streak >= 30 },
+    { id:'a19', icon:'✨', name:'Nový začátek',       desc:'Dosáhni první prestiže',                check: () => (gs.prestigeLevel || 0) >= 1 },
+    { id:'a20', icon:'🌠', name:'Veterán',            desc:'Dosáhni prestiže Level 5',              check: () => (gs.prestigeLevel || 0) >= 5 },
+    { id:'a21', icon:'🌌', name:'Pizzový bůh',        desc:'Dosáhni prestiže Level 10',             check: () => (gs.prestigeLevel || 0) >= 10 },
 ];
 
 function _achUpgradeCount() {

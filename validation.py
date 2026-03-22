@@ -3,12 +3,12 @@ from werkzeug.exceptions import BadRequest
 
 
 ALLOWED_SAVE_KEYS = {'pizzeriaName', 'money', 'totalEarned', 'clickValue', 'upgrades', 'lastSave',
-                     'earnedAchievements', 'totalClicks', 'streak', 'lastLoginDate'}
+                     'earnedAchievements', 'totalClicks', 'streak', 'lastLoginDate', 'prestigeLevel'}
 ALLOWED_UPGRADE_IDS = {
     'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12',
     'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'
 }
-ALLOWED_ACHIEVEMENT_IDS = {f'a{i}' for i in range(1, 19)}
+ALLOWED_ACHIEVEMENT_IDS = {f'a{i}' for i in range(1, 22)}
 
 
 def validate_save_payload(data):
@@ -33,6 +33,7 @@ def validate_save_payload(data):
     total_clicks = validate_number(data.get('totalClicks'), 'totalClicks', minimum=0, integer_only=True)
     streak = validate_number(data.get('streak'), 'streak', minimum=0, integer_only=True)
     last_login_date = validate_last_login_date(data.get('lastLoginDate'))
+    prestige_level = validate_number(data.get('prestigeLevel'), 'prestigeLevel', minimum=0, integer_only=True)
 
     return {
         'pizzeriaName': pizzeria_name,
@@ -45,6 +46,7 @@ def validate_save_payload(data):
         'totalClicks': total_clicks,
         'streak': streak,
         'lastLoginDate': last_login_date,
+        'prestigeLevel': prestige_level,
     }
 
 

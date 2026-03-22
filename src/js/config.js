@@ -28,7 +28,13 @@ const UPGRADES = [
 ];
 
 
-let gs = { pizzeriaName: 'Moje Pizzerie', money: 0, totalEarned: 0, clickValue: 1, upgrades: {}, lastSave: Date.now(), earnedAchievements: {}, totalClicks: 0, streak: 0, lastLoginDate: null };
+const PRESTIGE_THRESHOLD = 1e9; // 1 Miliarda € pro první prestiž
+
+let gs = { pizzeriaName: 'Moje Pizzerie', money: 0, totalEarned: 0, clickValue: 1, upgrades: {}, lastSave: Date.now(), earnedAchievements: {}, totalClicks: 0, streak: 0, lastLoginDate: null, prestigeLevel: 0 };
+
+function getPrestigeMultiplier() {
+    return 1 + ((gs.prestigeLevel || 0) * 0.25);
+}
 const el = {};
 let activeTab = 'click';
 let autoSave, gameLoop, lastUnlockCount = 0;

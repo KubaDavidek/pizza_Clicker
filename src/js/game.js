@@ -10,7 +10,7 @@ function initGame() {
     clearInterval(gameLoop);
     autoSave = setInterval(saveGame, CONFIG.AUTOSAVE_INTERVAL);
     gameLoop = setInterval(() => {
-        const pps = calculatePPS();
+    const pps = calculatePPS() * getPrestigeMultiplier();
         if (pps > 0) {
             gs.money += pps * CONFIG.TICK_INTERVAL / 1000;
             gs.totalEarned += pps * CONFIG.TICK_INTERVAL / 1000;
@@ -31,10 +31,11 @@ function handleClick(e) {
     if (_clickTimes.length >= MAX_CPS) return;
     _clickTimes.push(now);
 
-    gs.money += gs.clickValue;
-    gs.totalEarned += gs.clickValue;
+    const earned = gs.clickValue * getPrestigeMultiplier();
+    gs.money += earned;
+    gs.totalEarned += earned;
     gs.totalClicks++;
-    spawnFloat(e, gs.clickValue);
+    spawnFloat(e, earned);
     spawnParticles(e);
     const u = getUnlockCount();
     if (u !== lastUnlockCount) { lastUnlockCount = u; renderShop(); }
@@ -76,12 +77,15 @@ function calculatePPS() {
 }
 
 function updateDisplay() {
+    const mult = getPrestigeMultiplier();
     el.pizzeriaTitle.textContent = gs.pizzeriaName;
     el.moneyDisplay.textContent = `${formatNumber(Math.floor(gs.money))} €`;
-    el.ppsDisplay.textContent = `${formatNumber(calculatePPS())} €/s`;
+    el.ppsDisplay.textContent = `${formatNumber(calculatePPS() * mult)} €/s`;
     el.totalDisplay.textContent = `${formatNumber(Math.floor(gs.totalEarned))} €`;
-    el.clickValueDisplay.textContent = `${formatNumber(gs.clickValue)} €`;
+    el.clickValueDisplay.textContent = `${formatNumber(gs.clickValue * mult)} €`;
     el.streakDisplay.textContent = `🔥 ${gs.streak || 0}`;
+    el.prestigeDisplay.textContent = `✨ ${gs.prestigeLevel || 0}`;
+    el.prestigeBtn.classList.toggle('prestige-ready', canPrestige());
     document.title = `${formatNumber(Math.floor(gs.money))} € — Pizza Clicker 🍕`;
     el.shopList.querySelectorAll('.item-buy-btn[data-upgrade-id]').forEach(btn => {
         const u = UPGRADES.find(u => u.id === btn.dataset.upgradeId);

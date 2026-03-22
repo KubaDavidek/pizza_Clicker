@@ -83,11 +83,17 @@
                     <span class="ts-label">Streak</span>
                     <span class="ts-value" id="streak-display">🔥 0</span>
                 </div>
+                <div class="ts-divider"></div>
+                <div class="topbar-stat">
+                    <span class="ts-label">Prestiž</span>
+                    <span class="ts-value prestige-color" id="prestige-display">✨ 0</span>
+                </div>
             </div>
             <div class="topbar-actions">
                 <button id="profile-btn" class="tb-btn">👤 Profil</button>
                 <button id="leaderboard-btn" class="tb-btn">🏅 Žebříček</button>
                 <button id="achievements-btn" class="tb-btn">🎖 Achievementy</button>
+                <button id="prestige-btn" class="tb-btn tb-btn-prestige">✨ Prestiž</button>
                 <button id="reset-btn" class="tb-btn tb-btn-danger">↺ Reset</button>
                 <button id="logout-btn" class="tb-btn">⏏ Odhlásit</button>
             </div>
@@ -223,7 +229,65 @@
     <script src="js/reset.js"></script>
     <script src="js/profile.js"></script>
     <script src="js/achievements.js"></script>
+    <script src="js/prestige.js"></script>
     <script src="js/main.js"></script>
+
+    <!-- Prestige modal -->
+    <div id="prestige-modal" class="modal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <span>✨ Prestiž</span>
+                <button class="modal-close" id="close-prestige">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="prestige-info">
+                    <div class="prestige-level-display">
+                        <span class="prestige-level-label">Aktuální level</span>
+                        <span class="prestige-level-value" id="prestige-current-level">0</span>
+                    </div>
+                    <div class="prestige-arrow">→</div>
+                    <div class="prestige-level-display">
+                        <span class="prestige-level-label">Nový bonus</span>
+                        <span class="prestige-level-value gold" id="prestige-next-mult">×1.25</span>
+                    </div>
+                </div>
+                <div class="prestige-progress">
+                    <div class="prestige-progress-label">
+                        <span>Celkem vyděláno</span>
+                        <span id="prestige-current-earned">0 €</span>
+                    </div>
+                    <div class="prestige-progress-bar">
+                        <div class="prestige-progress-fill" id="prestige-progress-fill"></div>
+                    </div>
+                    <div class="prestige-threshold-label">Potřeba: <span id="prestige-threshold-val">1 B €</span></div>
+                </div>
+                <div class="prestige-details">
+                    <div class="prestige-detail-col prestige-resets">
+                        <div class="prestige-detail-title">🔄 Resetuje se</div>
+                        <ul>
+                            <li>💰 Hotovost</li>
+                            <li>🛒 Všechny upgrady</li>
+                            <li>📈 Celkem vyděláno</li>
+                        </ul>
+                    </div>
+                    <div class="prestige-detail-col prestige-keeps">
+                        <div class="prestige-detail-title">✅ Zůstane</div>
+                        <ul>
+                            <li>🏆 Achievementy</li>
+                            <li>🔥 Streak</li>
+                            <li>✨ Prestiž level</li>
+                            <li>👆 Celkové kliky</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-btns" style="margin-top:16px">
+                    <button id="prestige-confirm-btn" class="mbtn mbtn-prestige">✨ Aktivovat prestiž</button>
+                    <button id="cancel-prestige" class="mbtn mbtn-cancel">Zrušit</button>
+                </div>
+                <p id="prestige-not-ready" class="prestige-not-ready"></p>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

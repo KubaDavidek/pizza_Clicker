@@ -232,6 +232,7 @@ def get_save():
         'totalClicks':  extra.get('totalClicks', 0),
         'streak':       extra.get('streak', 0),
         'lastLoginDate': extra.get('lastLoginDate', None),
+        'prestigeLevel': extra.get('prestigeLevel', 0),
     })
 
 
@@ -255,6 +256,7 @@ def post_save():
         'totalClicks':        save_data['totalClicks'],
         'streak':             save_data['streak'],
         'lastLoginDate':      save_data['lastLoginDate'],
+        'prestigeLevel':      save_data['prestigeLevel'],
     })
     db.session.commit()
     return jsonify({'ok': True})
