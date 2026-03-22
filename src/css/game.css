@@ -12,6 +12,7 @@
     z-index: 200;
     box-shadow: 0 3px 12px rgba(0,0,0,.35);
     flex-shrink: 0;
+    min-height: 62px;
 }
 
 .topbar-logo { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
@@ -103,13 +104,17 @@
 
 #game-screen {
     height: 100vh;
+    height: 100dvh;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .game-layout {
     display: grid;
     grid-template-columns: 1fr 370px;
-    height: calc(100vh - 62px);
+    flex: 1;
+    min-height: 0;
     overflow: hidden;
 }
 
@@ -231,13 +236,46 @@
         grid-template-columns: 1fr;
         grid-template-rows: 1fr auto;
     }
-    .pizza-area { min-height: 380px; }
-    .topbar-stats { gap: 4px; }
-    .ts-divider { display: none; }
+    .pizza-area { min-height: 280px; }
+    .ts-divider  { display: none; }
 }
 
-@media (max-width: 560px) {
-    #pizza-button  { font-size: 130px; }
-    .topbar        { flex-wrap: wrap; height: auto; padding: 10px 14px; gap: 8px; }
-    .topbar-name   { max-width: 130px; }
+@media (max-width: 640px) {
+    .topbar {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 8px 12px;
+        gap: 6px;
+        row-gap: 4px;
+    }
+    .topbar-name { max-width: 110px; font-size: .9rem; }
+    .topbar-stats {
+        order: 2;
+        width: 100%;
+        justify-content: space-around;
+        gap: 0;
+        padding: 2px 0;
+    }
+    .topbar-stats > *:nth-child(n+5) { display: none; }
+    .topbar-actions {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        flex-wrap: nowrap;
+        gap: 5px;
+        padding-bottom: 2px;
+    }
+    .topbar-actions::-webkit-scrollbar { display: none; }
+    .tb-btn    { padding: 6px 10px; font-size: .73rem; flex-shrink: 0; }
+    .pizza-area { min-height: 220px; }
+    #pizza-button { font-size: 120px; }
+}
+
+@media (max-width: 380px) {
+    .topbar-name  { display: none; }
+    .pizza-area   { min-height: 180px; }
+    #pizza-button { font-size: 96px; }
+    .tb-btn       { padding: 5px 8px; font-size: .68rem; }
 }

@@ -52,3 +52,4 @@
     Denní streak systém
     Brute-force ochrana přihlášení (max 10 pokusů/min na IP)
     Session expirace (permanent session, platnost 30 dní)
+    Opravení responzivity na mobil
