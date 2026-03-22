@@ -193,3 +193,19 @@ def validate_leaderboard_post_payload(data):
         'pps': validate_number(data['pps'], 'pps', minimum=0),
         'total': validate_number(data['total'], 'total', minimum=0),
     }
+
+
+def validate_change_password_payload(data):
+    if not isinstance(data, dict):
+        raise BadRequest('Request body must be a JSON object.')
+    allowed = {'old_password', 'new_password'}
+    unknown = set(data.keys()) - allowed
+    if unknown:
+        raise BadRequest(f'Unknown fields: {", ".join(sorted(unknown))}.')
+    missing = allowed - set(data.keys())
+    if missing:
+        raise BadRequest(f'Missing fields: {", ".join(sorted(missing))}.')
+    return {
+        'old_password': validate_password(data['old_password']),
+        'new_password': validate_password(data['new_password']),
+    }

@@ -80,6 +80,7 @@
                 </div>
             </div>
             <div class="topbar-actions">
+                <button id="profile-btn" class="tb-btn">👤 Profil</button>
                 <button id="leaderboard-btn" class="tb-btn">🏅 Žebříček</button>
                 <button id="reset-btn" class="tb-btn tb-btn-danger">↺ Reset</button>
                 <button id="logout-btn" class="tb-btn">⏏ Odhlásit</button>
@@ -151,12 +152,58 @@
         </div>
     </div>
 
+    <div id="profile-modal" class="modal">
+        <div class="modal-box">
+            <div class="modal-head">
+                <span>👤 Profil hráče</span>
+                <button class="modal-close" id="close-profile">✕</button>
+            </div>
+            <div class="modal-body">
+
+                <div class="profile-stats" id="profile-stats">
+                    <div class="profile-stat">
+                        <div class="profile-stat-label">Přezdívka</div>
+                        <div class="profile-stat-value" id="profile-nickname">–</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-label">Registrace</div>
+                        <div class="profile-stat-value" id="profile-created">–</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-label">Celkem vyděláno</div>
+                        <div class="profile-stat-value" id="profile-total">–</div>
+                    </div>
+                    <div class="profile-stat">
+                        <div class="profile-stat-label">Koupené upgrady</div>
+                        <div class="profile-stat-value" id="profile-upgrades">–</div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <div class="profile-section-title">🔑 Změna hesla</div>
+                    <input type="password" id="profile-old-pw"  class="profile-input" placeholder="Staré heslo">
+                    <input type="password" id="profile-new-pw"  class="profile-input" placeholder="Nové heslo (min. 6 znaků)">
+                    <button id="profile-save-pw" class="profile-btn profile-btn-primary">Uložit heslo</button>
+                    <div id="profile-pw-msg" class="profile-msg"></div>
+                </div>
+
+                <div class="danger-zone">
+                    <div class="danger-zone-title">⛔ Danger Zone</div>
+                    <p>Trvale smaže tvůj účet, herní postup a záznam v žebříčku. Tato akce je nevratná.</p>
+                    <button id="profile-delete-btn" class="profile-btn profile-btn-danger">Smazat účet</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <script src="js/config.js"></script>
     <script src="js/landing.js"></script>
     <script src="js/game.js"></script>
     <script src="js/shop.js"></script>
     <script src="js/leaderboard.js"></script>
     <script src="js/reset.js"></script>
+    <script src="js/profile.js"></script>
     <script src="js/main.js"></script>
 
 </body>

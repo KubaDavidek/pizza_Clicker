@@ -37,6 +37,10 @@
     CSRF ochrana
     Cookies Secure a HttpOnly
     Přidal jsem requirements.lock a req komenty
-    
 
-
+22.3.2026 - David Čadek
+    Upravena responzivita webu (skore netančí, vylepšené zobrazení na mobilních telefonech)
+    SEO optimalizace (title, meta description, alt atributy, struktura nadpisů)
+    Přidáno API pro získávání statistik (api/stats)
+    GZIP komprese API odpovědí
+    Přídána manipulace s profilem (změna hesla, smazání účtu)

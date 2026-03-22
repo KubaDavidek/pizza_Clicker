@@ -7,7 +7,7 @@ from flask import Flask, request, jsonify, send_from_directory, session
 from flask_compress import Compress
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.pool import NullPool
-from werkzeug.exceptions import BadRequest, Unauthorized, Conflict, HTTPException
+from werkzeug.exceptions import BadRequest, Unauthorized, Forbidden, Conflict, HTTPException
 from werkzeug.security import generate_password_hash, check_password_hash
 from logging_config import configure_logging
 from validation import (
@@ -15,6 +15,7 @@ from validation import (
     validate_register_payload,
     validate_login_payload,
     validate_leaderboard_post_payload,
+    validate_change_password_payload,
 )
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -48,8 +49,8 @@ class User(db.Model):
     nickname      = db.Column(db.String(30), unique=True, nullable=False)
     password_hash = db.Column(db.String(256), nullable=False)
     created_at    = db.Column(db.DateTime, server_default=db.func.now())
-    save              = db.relationship('Save',             backref='user', uselist=False, lazy=True)
-    leaderboard_entry = db.relationship('LeaderboardEntry', backref='user', uselist=False, lazy=True)
+    save              = db.relationship('Save',             backref='user', uselist=False, lazy=True, cascade='all, delete-orphan')
+    leaderboard_entry = db.relationship('LeaderboardEntry', backref='user', uselist=False, lazy=True, cascade='all, delete-orphan')
 
 
 class Save(db.Model):
@@ -249,6 +250,45 @@ def get_stats():
         'registered_users': registered_users,
         'active_saves':     active_saves,
     })
+
+
+# --- Profile endpoints ---
+
+@app.route('/api/profile', methods=['GET'])
+def get_profile():
+    user = require_auth()
+    s = user.save
+    upgrades_bought = 0
+    if s:
+        import json as _json
+        upgrades_bought = sum(1 for v in _json.loads(s.upgrades).values() if v)
+    return jsonify({
+        'nickname':       user.nickname,
+        'created_at':     user.created_at.isoformat() if user.created_at else None,
+        'total_earned':   s.total_earned if s else 0,
+        'money':          s.money        if s else 0,
+        'upgrades_bought': upgrades_bought,
+    })
+
+
+@app.route('/api/profile/password', methods=['POST'])
+def change_password():
+    user = require_auth()
+    data = validate_change_password_payload(get_json_body())
+    if not check_password_hash(user.password_hash, data['old_password']):
+        raise Forbidden('Staré heslo není správné.')
+    user.password_hash = generate_password_hash(data['new_password'])
+    db.session.commit()
+    return jsonify({'ok': True})
+
+
+@app.route('/api/profile', methods=['DELETE'])
+def delete_profile():
+    user = require_auth()
+    db.session.delete(user)
+    db.session.commit()
+    session.clear()
+    return jsonify({'ok': True})
 
 
 

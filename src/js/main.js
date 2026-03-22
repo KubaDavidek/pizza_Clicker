@@ -20,6 +20,13 @@ document.addEventListener('DOMContentLoaded', () => {
         authError:'auth-error',            authSubmitBtn:'auth-submit-btn',
         newGamePanel:'new-game-panel',     loggedInLabel:'logged-in-label',
         logoutBtn:'logout-btn',
+        profileBtn:'profile-btn',      profileModal:'profile-modal',
+        closeProfile:'close-profile',
+        profileNickname:'profile-nickname', profileCreated:'profile-created',
+        profileTotal:'profile-total',       profileUpgrades:'profile-upgrades',
+        profileOldPw:'profile-old-pw',      profileNewPw:'profile-new-pw',
+        profileSavePw:'profile-save-pw',    profilePwMsg:'profile-pw-msg',
+        profileDeleteBtn:'profile-delete-btn',
     };
     Object.entries(ids).forEach(([k, v]) => el[k] = document.getElementById(v));
     el.shopTabs = document.querySelectorAll('.shop-tab');
@@ -66,12 +73,20 @@ document.addEventListener('DOMContentLoaded', () => {
     el.resetModal.addEventListener('click', e => e.target === el.resetModal && el.resetModal.classList.remove('active'));
 
 
+    el.profileBtn.addEventListener('click', openProfile);
+    el.closeProfile.addEventListener('click', closeProfile);
+    el.profileModal.addEventListener('click', e => e.target === el.profileModal && closeProfile());
+    el.profileSavePw.addEventListener('click', changePassword);
+    el.profileDeleteBtn.addEventListener('click', deleteAccount);
+    el.profileNewPw.addEventListener('keypress', e => e.key === 'Enter' && changePassword());
+
+
     document.addEventListener('keydown', e => {
         if (e.code === 'Space' && !e.repeat && el.gameScreen.classList.contains('active')) {
             e.preventDefault();
             handleClick({ clientX: innerWidth / 2, clientY: innerHeight / 2 });
         }
-        if (e.code === 'Escape') { closeLeaderboard(); el.resetModal.classList.remove('active'); }
+        if (e.code === 'Escape') { closeLeaderboard(); el.resetModal.classList.remove('active'); closeProfile(); }
     });
 
     initAuth();
