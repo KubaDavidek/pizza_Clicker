@@ -37,6 +37,13 @@ document.addEventListener('DOMContentLoaded', () => {
         prestigeCurrentLevel:'prestige-current-level', prestigeNextMult:'prestige-next-mult',
         prestigeThresholdVal:'prestige-threshold-val', prestigeCurrentEarned:'prestige-current-earned',
         prestigeProgressFill:'prestige-progress-fill', prestigeNotReady:'prestige-not-ready',
+        bonusBtn:'bonus-btn',
+        spinModal:'spin-modal',                closeSpin:'close-spin',
+        spinWheelEl:'spin-wheel-el',           spinBtn:'spin-btn',
+        spinResult:'spin-result',              spinResultIcon:'spin-result-icon',
+        spinResultName:'spin-result-name',     spinResultDesc:'spin-result-desc',
+        spinResultOk:'spin-result-ok',
+        boostStat:'boost-stat',                boostDisplay:'boost-display',
     };
     Object.entries(ids).forEach(([k, v]) => el[k] = document.getElementById(v));
     el.shopTabs = document.querySelectorAll('.shop-tab');
@@ -100,13 +107,19 @@ document.addEventListener('DOMContentLoaded', () => {
     el.prestigeModal.addEventListener('click', e => e.target === el.prestigeModal && closePrestige());
     el.prestigeConfirmBtn.addEventListener('click', doPrestige);
 
+    el.bonusBtn.addEventListener('click', openSpinWheel);
+    el.closeSpin.addEventListener('click', closeSpinWheel);
+    el.spinModal.addEventListener('click', e => e.target === el.spinModal && closeSpinWheel());
+    el.spinBtn.addEventListener('click', spin);
+    el.spinResultOk.addEventListener('click', closeSpinWheel);
+
 
     document.addEventListener('keydown', e => {
         if (e.code === 'Space' && !e.repeat && el.gameScreen.classList.contains('active')) {
             e.preventDefault();
             handleClick({ clientX: innerWidth / 2, clientY: innerHeight / 2 });
         }
-        if (e.code === 'Escape') { closeLeaderboard(); el.resetModal.classList.remove('active'); closeProfile(); closeAchievements(); closePrestige(); }
+        if (e.code === 'Escape') { closeLeaderboard(); el.resetModal.classList.remove('active'); closeProfile(); closeAchievements(); closePrestige(); closeSpinWheel(); }
     });
 
     initAuth();

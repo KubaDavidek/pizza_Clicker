@@ -233,6 +233,10 @@ def get_save():
         'streak':       extra.get('streak', 0),
         'lastLoginDate': extra.get('lastLoginDate', None),
         'prestigeLevel': extra.get('prestigeLevel', 0),
+        'lastSpinDate': extra.get('lastSpinDate', None),
+        'boostType':    extra.get('boostType', None),
+        'boostMult':    extra.get('boostMult', 1),
+        'boostEnd':     extra.get('boostEnd', 0),
     })
 
 
@@ -257,6 +261,10 @@ def post_save():
         'streak':             save_data['streak'],
         'lastLoginDate':      save_data['lastLoginDate'],
         'prestigeLevel':      save_data['prestigeLevel'],
+        'lastSpinDate':       save_data['lastSpinDate'],
+        'boostType':          save_data['boostType'],
+        'boostMult':          save_data['boostMult'],
+        'boostEnd':           save_data['boostEnd'],
     })
     db.session.commit()
     return jsonify({'ok': True})

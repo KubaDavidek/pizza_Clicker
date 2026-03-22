@@ -88,6 +88,10 @@ async function afterAuth() {
         if (gs.streak === undefined) gs.streak = 0;
         if (gs.lastLoginDate === undefined) gs.lastLoginDate = null;
         if (/^\d+$/.test(gs.pizzeriaName)) gs.pizzeriaName = 'Moje Pizzerie';
+        if (gs.lastSpinDate === undefined) gs.lastSpinDate = null;
+        if (gs.boostType === undefined) gs.boostType = null;
+        if (gs.boostMult === undefined) gs.boostMult = 1;
+        if (gs.boostEnd === undefined) gs.boostEnd = 0;
         const streakIncreased = _updateStreak();
         el.landingScreen.classList.remove('active');
         el.gameScreen.classList.add('active');
@@ -101,6 +105,9 @@ async function afterAuth() {
         if (streakIncreased) {
             checkAchievements();
             setTimeout(() => _showStreakToast(gs.streak), offline ? 4500 : 0);
+        }
+        if (!hasSpunToday()) {
+            setTimeout(openSpinWheel, offline ? 6000 : 2000);
         }
     } else {
         showNewGamePanel();
@@ -135,6 +142,9 @@ function startGame() {
         money: 0, totalEarned: 0, clickValue: 1,
         upgrades: {}, lastSave: Date.now(),
         earnedAchievements: {}, totalClicks: 0,
+        streak: 0, lastLoginDate: null,
+        prestigeLevel: 0, lastSpinDate: null,
+        boostType: null, boostMult: 1, boostEnd: 0,
     };
     el.landingScreen.classList.remove('active');
     el.gameScreen.classList.add('active');
@@ -181,7 +191,7 @@ async function logoutUser() {
     currentUser = null;
     clearInterval(autoSave);
     clearInterval(gameLoop);
-    gs = { pizzeriaName: 'Moje Pizzerie', money: 0, totalEarned: 0, clickValue: 1, upgrades: {}, lastSave: Date.now(), earnedAchievements: {}, totalClicks: 0 };
+    gs = { pizzeriaName: 'Moje Pizzerie', money: 0, totalEarned: 0, clickValue: 1, upgrades: {}, lastSave: Date.now(), earnedAchievements: {}, totalClicks: 0, streak: 0, lastLoginDate: null, prestigeLevel: 0, lastSpinDate: null, boostType: null, boostMult: 1, boostEnd: 0 };
     el.gameScreen.classList.remove('active');
     el.newGamePanel.style.display   = 'none';
     el.authPanel.style.display      = 'block';

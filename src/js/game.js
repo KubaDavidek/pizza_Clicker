@@ -10,12 +10,16 @@ function initGame() {
     clearInterval(gameLoop);
     autoSave = setInterval(saveGame, CONFIG.AUTOSAVE_INTERVAL);
     gameLoop = setInterval(() => {
-    const pps = calculatePPS() * getPrestigeMultiplier();
+        if (gs.boostEnd > 0 && Date.now() >= gs.boostEnd) {
+            gs.boostType = null; gs.boostMult = 1; gs.boostEnd = 0;
+        }
+        const boostActive = getBoostTimeLeft() > 0;
+        const pps = calculatePPS() * getPrestigeMultiplier();
         if (pps > 0) {
             gs.money += pps * CONFIG.TICK_INTERVAL / 1000;
             gs.totalEarned += pps * CONFIG.TICK_INTERVAL / 1000;
-            updateDisplay();
         }
+        if (pps > 0 || boostActive) updateDisplay();
         const u = getUnlockCount();
         if (u !== lastUnlockCount) { lastUnlockCount = u; renderShop(); }
         checkAchievements();
@@ -31,7 +35,7 @@ function handleClick(e) {
     if (_clickTimes.length >= MAX_CPS) return;
     _clickTimes.push(now);
 
-    const earned = gs.clickValue * getPrestigeMultiplier();
+    const earned = gs.clickValue * getPrestigeMultiplier() * getClickBoostMult();
     gs.money += earned;
     gs.totalEarned += earned;
     gs.totalClicks++;
@@ -73,19 +77,31 @@ function spawnParticles(e) {
 }
 
 function calculatePPS() {
-    return UPGRADES.filter(u => u.type === 'pps' && gs.upgrades[u.id]).reduce((s, u) => s + u.flat, 0);
+    const base = UPGRADES.filter(u => u.type === 'pps' && gs.upgrades[u.id]).reduce((s, u) => s + u.flat, 0);
+    return base * getPPSBoostMult();
 }
 
 function updateDisplay() {
-    const mult = getPrestigeMultiplier();
-    el.pizzeriaTitle.textContent = gs.pizzeriaName;
-    el.moneyDisplay.textContent = `${formatNumber(Math.floor(gs.money))} €`;
-    el.ppsDisplay.textContent = `${formatNumber(calculatePPS() * mult)} €/s`;
-    el.totalDisplay.textContent = `${formatNumber(Math.floor(gs.totalEarned))} €`;
-    el.clickValueDisplay.textContent = `${formatNumber(gs.clickValue * mult)} €`;
-    el.streakDisplay.textContent = `🔥 ${gs.streak || 0}`;
-    el.prestigeDisplay.textContent = `✨ ${gs.prestigeLevel || 0}`;
+    const mult      = getPrestigeMultiplier();
+    const boostLeft = getBoostTimeLeft();
+    el.pizzeriaTitle.textContent     = gs.pizzeriaName;
+    el.moneyDisplay.textContent      = `${formatNumber(Math.floor(gs.money))} €`;
+    el.ppsDisplay.textContent        = `${formatNumber(calculatePPS() * mult)} €/s`;
+    el.totalDisplay.textContent      = `${formatNumber(Math.floor(gs.totalEarned))} €`;
+    el.clickValueDisplay.textContent = `${formatNumber(gs.clickValue * mult * getClickBoostMult())} €`;
+    el.streakDisplay.textContent     = `🔥 ${gs.streak || 0}`;
+    el.prestigeDisplay.textContent   = `✨ ${gs.prestigeLevel || 0}`;
     el.prestigeBtn.classList.toggle('prestige-ready', canPrestige());
+    el.bonusBtn.classList.toggle('bonus-ready', !hasSpunToday());
+    if (boostLeft > 0) {
+        const icon = gs.boostType === 'all' ? '✨' : gs.boostType === 'click' ? '👆' : '⚡';
+        el.boostDisplay.textContent = `${icon} ×${gs.boostMult} ${_formatBoostTime(boostLeft)}`;
+        el.boostStat.style.display  = '';
+        document.getElementById('boost-stat-divider').style.display = '';
+    } else {
+        el.boostStat.style.display = 'none';
+        document.getElementById('boost-stat-divider').style.display = 'none';
+    }
     document.title = `${formatNumber(Math.floor(gs.money))} € — Pizza Clicker 🍕`;
     el.shopList.querySelectorAll('.item-buy-btn[data-upgrade-id]').forEach(btn => {
         const u = UPGRADES.find(u => u.id === btn.dataset.upgradeId);

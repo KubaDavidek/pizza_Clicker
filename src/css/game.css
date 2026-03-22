@@ -52,6 +52,7 @@
 .ts-value.amber  { color: #FCD34D; }
 .ts-value.purple { color: #C4B5FD; }
 .ts-value.prestige-color { color: #FCD34D; }
+.ts-value.boost-color    { color: #4ADE80; }
 
 .ts-divider { width: 1px; height: 28px; background: rgba(255,255,255,.15); flex-shrink: 0; }
 
@@ -85,6 +86,19 @@
 @keyframes prestigePulse {
     0%, 100% { box-shadow: 0 0 0 0 rgba(212,160,23,0); }
     50%       { box-shadow: 0 0 10px 3px rgba(212,160,23,.45); }
+}
+
+.tb-btn-bonus { border-color: rgba(74,222,128,.4); color: #6EE7B7; }
+.tb-btn-bonus:hover { background: rgba(74,222,128,.15); border-color: #4ADE80; }
+.tb-btn-bonus.bonus-ready {
+    border-color: #4ADE80;
+    color: #6EE7B7;
+    animation: bonusPulse 2s ease-in-out infinite;
+}
+
+@keyframes bonusPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(74,222,128,0); }
+    50%       { box-shadow: 0 0 10px 3px rgba(74,222,128,.4); }
 }
 
 #game-screen {

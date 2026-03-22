@@ -3,7 +3,8 @@ from werkzeug.exceptions import BadRequest
 
 
 ALLOWED_SAVE_KEYS = {'pizzeriaName', 'money', 'totalEarned', 'clickValue', 'upgrades', 'lastSave',
-                     'earnedAchievements', 'totalClicks', 'streak', 'lastLoginDate', 'prestigeLevel'}
+                     'earnedAchievements', 'totalClicks', 'streak', 'lastLoginDate', 'prestigeLevel',
+                     'lastSpinDate', 'boostType', 'boostMult', 'boostEnd'}
 ALLOWED_UPGRADE_IDS = {
     'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'c11', 'c12',
     'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10'
@@ -34,6 +35,10 @@ def validate_save_payload(data):
     streak = validate_number(data.get('streak'), 'streak', minimum=0, integer_only=True)
     last_login_date = validate_last_login_date(data.get('lastLoginDate'))
     prestige_level = validate_number(data.get('prestigeLevel'), 'prestigeLevel', minimum=0, integer_only=True)
+    last_spin_date = validate_last_login_date(data.get('lastSpinDate'))
+    boost_type = validate_boost_type(data.get('boostType'))
+    boost_mult = validate_number(data.get('boostMult'), 'boostMult', minimum=1, maximum=10)
+    boost_end  = validate_number(data.get('boostEnd'),  'boostEnd',  minimum=0, integer_only=True)
 
     return {
         'pizzeriaName': pizzeria_name,
@@ -47,6 +52,10 @@ def validate_save_payload(data):
         'streak': streak,
         'lastLoginDate': last_login_date,
         'prestigeLevel': prestige_level,
+        'lastSpinDate': last_spin_date,
+        'boostType': boost_type,
+        'boostMult': boost_mult,
+        'boostEnd': boost_end,
     }
 
 
@@ -97,7 +106,7 @@ def validate_name(value, field_name):
     return value
 
 
-def validate_number(value, field_name, minimum=None, integer_only=False):
+def validate_number(value, field_name, minimum=None, maximum=None, integer_only=False):
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise BadRequest(f'{field_name} must be a number.')
 
@@ -107,11 +116,25 @@ def validate_number(value, field_name, minimum=None, integer_only=False):
     if minimum is not None and value < minimum:
         raise BadRequest(f'{field_name} must be at least {minimum}.')
 
+    if maximum is not None and value > maximum:
+        raise BadRequest(f'{field_name} must be at most {maximum}.')
+
     if integer_only:
         if isinstance(value, float) and not value.is_integer():
             raise BadRequest(f'{field_name} must be an integer.')
         return int(value)
 
+    return value
+
+
+_ALLOWED_BOOST_TYPES = {'click', 'pps', 'all'}
+
+
+def validate_boost_type(value):
+    if value is None:
+        return None
+    if not isinstance(value, str) or value not in _ALLOWED_BOOST_TYPES:
+        raise BadRequest(f'boostType must be null or one of: {", ".join(sorted(_ALLOWED_BOOST_TYPES))}.')
     return value
 
 

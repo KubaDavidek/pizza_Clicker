@@ -218,6 +218,127 @@
 .profile-btn-danger:hover { background: var(--red-dark); }
 
 
+/* ── Spin Wheel modal ─────────────────────────────────── */
+
+.modal-spin { max-width: 400px; }
+
+.spin-modal-body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 22px 22px;
+}
+
+.spin-wheel-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spin-wheel-outer {
+    position: relative;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    box-shadow: 0 0 0 5px var(--brown), 0 8px 32px rgba(0,0,0,.25);
+    flex-shrink: 0;
+}
+
+.spin-wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    will-change: transform;
+}
+
+.spin-sector-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-size: 1.55rem;
+    transform: translate(-50%, -50%) rotate(var(--deg)) translateY(-76px);
+    pointer-events: none;
+    line-height: 1;
+}
+
+.spin-center-dot {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 22px;
+    height: 22px;
+    background: var(--brown);
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    z-index: 5;
+    pointer-events: none;
+}
+
+.spin-pointer {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    width: 0;
+    height: 0;
+    border-left: 11px solid transparent;
+    border-right: 11px solid transparent;
+    border-top: 22px solid var(--brown);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,.3));
+}
+
+.spin-button {
+    padding: 13px 36px;
+    background: linear-gradient(135deg, var(--gold), #e8930a);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .15s, filter .15s;
+    box-shadow: 0 4px 16px rgba(212,160,23,.35);
+}
+
+.spin-button:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.1); }
+.spin-button:disabled { opacity: .5; cursor: not-allowed; transform: none !important; filter: none; }
+
+.spin-result {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    text-align: center;
+    background: linear-gradient(135deg, #FFF8EE, #F5E6C8);
+    border: 2px solid var(--gold);
+    border-radius: 16px;
+    padding: 16px 20px;
+    width: 100%;
+    animation: modalPop .25s ease-out;
+}
+.spin-result.active { display: flex; }
+
+.spin-result-icon { font-size: 2.8rem; line-height: 1; }
+
+.spin-result-text { display: flex; flex-direction: column; gap: 2px; }
+
+.spin-result-name {
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--brown);
+}
+
+.spin-result-desc {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--gold);
+}
+
 /* ── Prestige modal ────────────────────────────────────── */
 
 .prestige-info {

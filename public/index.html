@@ -88,11 +88,17 @@
                     <span class="ts-label">Prestiž</span>
                     <span class="ts-value prestige-color" id="prestige-display">✨ 0</span>
                 </div>
+                <div id="boost-stat-divider" class="ts-divider" style="display:none"></div>
+                <div id="boost-stat" class="topbar-stat" style="display:none">
+                    <span class="ts-label">Boost</span>
+                    <span class="ts-value boost-color" id="boost-display">–</span>
+                </div>
             </div>
             <div class="topbar-actions">
                 <button id="profile-btn" class="tb-btn">👤 Profil</button>
                 <button id="leaderboard-btn" class="tb-btn">🏅 Žebříček</button>
                 <button id="achievements-btn" class="tb-btn">🎖 Achievementy</button>
+                <button id="bonus-btn" class="tb-btn tb-btn-bonus">🎡 Bonus</button>
                 <button id="prestige-btn" class="tb-btn tb-btn-prestige">✨ Prestiž</button>
                 <button id="reset-btn" class="tb-btn tb-btn-danger">↺ Reset</button>
                 <button id="logout-btn" class="tb-btn">⏏ Odhlásit</button>
@@ -230,6 +236,7 @@
     <script src="js/profile.js"></script>
     <script src="js/achievements.js"></script>
     <script src="js/prestige.js"></script>
+    <script src="js/spinwheel.js"></script>
     <script src="js/main.js"></script>
 
     <!-- Prestige modal -->
@@ -285,6 +292,32 @@
                     <button id="cancel-prestige" class="mbtn mbtn-cancel">Zrušit</button>
                 </div>
                 <p id="prestige-not-ready" class="prestige-not-ready"></p>
+            </div>
+        </div>
+    </div>
+    <!-- Spin Wheel modal -->
+    <div id="spin-modal" class="modal">
+        <div class="modal-box modal-spin">
+            <div class="modal-head">
+                <span>🎡 Denní bonus</span>
+                <button class="modal-close" id="close-spin">✕</button>
+            </div>
+            <div class="modal-body spin-modal-body">
+                <div class="spin-wheel-wrap">
+                    <div class="spin-wheel-outer">
+                        <div class="spin-pointer"></div>
+                        <div id="spin-wheel-el" class="spin-wheel"></div>
+                    </div>
+                </div>
+                <button id="spin-btn" class="spin-button">Točit! 🎡</button>
+                <div id="spin-result" class="spin-result">
+                    <span id="spin-result-icon" class="spin-result-icon"></span>
+                    <div class="spin-result-text">
+                        <div class="spin-result-name" id="spin-result-name"></div>
+                        <div class="spin-result-desc" id="spin-result-desc"></div>
+                    </div>
+                    <button id="spin-result-ok" class="mbtn mbtn-prestige" style="margin-top:12px;width:100%">Super! 🎉</button>
+                </div>
             </div>
         </div>
     </div>
