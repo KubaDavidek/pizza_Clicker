@@ -93,14 +93,13 @@ async function afterAuth() {
         if (gs.boostMult === undefined) gs.boostMult = 1;
         if (gs.boostEnd === undefined) gs.boostEnd = 0;
         const streakIncreased = _updateStreak();
+        const offline = applyOfflineEarnings();
         el.landingScreen.classList.remove('active');
         el.gameScreen.classList.add('active');
         initGame();
-        const offline = applyOfflineEarnings();
         if (offline) {
-            updateDisplay();
             saveGame();
-            showOfflineToast(offline.earned, offline.awaySecs);
+            showOfflineToast(offline.earned, offline.awaySecs, offline.capped);
         }
         if (streakIncreased) {
             checkAchievements();

@@ -123,26 +123,47 @@ const OFFLINE_RATE     = 0.25;
 const OFFLINE_MAX_SECS = 8 * 3600; // max 8 hodin
 
 function applyOfflineEarnings() {
-    const pps = calculatePPS();
-    if (pps <= 0) return null;
-    const awaySecs = Math.min((Date.now() - gs.lastSave) / 1000, OFFLINE_MAX_SECS);
+    const now = Date.now();
+    const awaySecs = Math.min(Math.max((now - gs.lastSave) / 1000, 0), OFFLINE_MAX_SECS);
     if (awaySecs < 10) return null;
-    const earned = Math.floor(pps * awaySecs * OFFLINE_RATE);
+
+    const basePps = UPGRADES
+        .filter(u => u.type === 'pps' && gs.upgrades[u.id])
+        .reduce((sum, u) => sum + u.flat, 0) * getPrestigeMultiplier();
+    if (basePps <= 0) return null;
+
+    // Pokud byl aktivní PPS/all boost při posledním uložení, dopočítáme jen část,
+    // která reálně pokryla dobu offline.
+    let boostedSecs = 0;
+    const hasPpsBoost = (gs.boostType === 'pps' || gs.boostType === 'all') && (gs.boostMult || 1) > 1;
+    if (hasPpsBoost && gs.boostEnd > gs.lastSave) {
+        boostedSecs = Math.min(awaySecs, Math.max((gs.boostEnd - gs.lastSave) / 1000, 0));
+    }
+    const normalSecs = awaySecs - boostedSecs;
+    const boostedPps = basePps * (gs.boostMult || 1);
+
+    const earned = Math.floor(((normalSecs * basePps) + (boostedSecs * boostedPps)) * OFFLINE_RATE);
+    if (earned <= 0) return null;
+
     gs.money       += earned;
     gs.totalEarned += earned;
-    return { earned, awaySecs };
+    return { earned, awaySecs, capped: awaySecs >= OFFLINE_MAX_SECS };
 }
 
-function showOfflineToast(earned, awaySecs) {
+function showOfflineToast(earned, awaySecs, capped = false) {
     const h = Math.floor(awaySecs / 3600);
     const m = Math.floor((awaySecs % 3600) / 60);
-    const timeStr = h > 0 ? `${h}h ${m}m` : `${m}m`;
+    const s = Math.floor(awaySecs % 60);
+    let timeStr = `${s}s`;
+    if (m > 0 || h > 0) timeStr = `${m}m ${s}s`;
+    if (h > 0) timeStr = `${h}h ${m}m`;
+    const capNote = capped ? ' (max 8h)' : '';
     const toast = document.createElement('div');
     toast.className = 'achievement-toast offline-toast';
     toast.innerHTML =
         `<span class="ach-toast-icon">💤</span>` +
         `<div class="ach-toast-text">` +
-        `<div class="ach-toast-label">Byl jsi pryč ${timeStr}</div>` +
+        `<div class="ach-toast-label">Byl jsi pryč ${timeStr}${capNote}</div>` +
         `<div class="ach-toast-name">+${formatNumber(earned)} €</div>` +
         `</div>`;
     document.body.appendChild(toast);
