@@ -97,3 +97,37 @@ function saveGame() {
         .then(r => { if (r.status === 401) logoutUser(); })
         .catch(() => {});
 }
+
+const OFFLINE_RATE     = 0.25;
+const OFFLINE_MAX_SECS = 8 * 3600; // max 8 hodin
+
+function applyOfflineEarnings() {
+    const pps = calculatePPS();
+    if (pps <= 0) return null;
+    const awaySecs = Math.min((Date.now() - gs.lastSave) / 1000, OFFLINE_MAX_SECS);
+    if (awaySecs < 10) return null;
+    const earned = Math.floor(pps * awaySecs * OFFLINE_RATE);
+    gs.money       += earned;
+    gs.totalEarned += earned;
+    return { earned, awaySecs };
+}
+
+function showOfflineToast(earned, awaySecs) {
+    const h = Math.floor(awaySecs / 3600);
+    const m = Math.floor((awaySecs % 3600) / 60);
+    const timeStr = h > 0 ? `${h}h ${m}m` : `${m}m`;
+    const toast = document.createElement('div');
+    toast.className = 'achievement-toast offline-toast';
+    toast.innerHTML =
+        `<span class="ach-toast-icon">💤</span>` +
+        `<div class="ach-toast-text">` +
+        `<div class="ach-toast-label">Byl jsi pryč ${timeStr}</div>` +
+        `<div class="ach-toast-name">+${formatNumber(earned)} €</div>` +
+        `</div>`;
+    document.body.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+    }, 5000);
+}

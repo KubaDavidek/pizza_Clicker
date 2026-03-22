@@ -294,6 +294,9 @@
 
 .achievement-toast.show { right: 20px; }
 
+.offline-toast { border-color: #059669; }
+.offline-toast .ach-toast-label { color: #059669; }
+
 .ach-toast-icon { font-size: 2rem; flex-shrink: 0; }
 
 .ach-toast-label {

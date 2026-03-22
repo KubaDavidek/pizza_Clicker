@@ -89,6 +89,12 @@ async function afterAuth() {
         el.landingScreen.classList.remove('active');
         el.gameScreen.classList.add('active');
         initGame();
+        const offline = applyOfflineEarnings();
+        if (offline) {
+            updateDisplay();
+            saveGame();
+            showOfflineToast(offline.earned, offline.awaySecs);
+        }
     } else {
         showNewGamePanel();
     }
