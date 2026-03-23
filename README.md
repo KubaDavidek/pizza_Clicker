@@ -94,6 +94,94 @@ Použito relační tabulkové paradigma s jasným foreign key mapováním.
 
 ---
 
+## 💻 Ukázky klíčového kódu
+
+Pro lepší představu o fungování herních a bezpečnostních mechanismů zde uvádíme ukázky stěžejních částí samotného originálního kódu projektu.
+
+### 1. Herní smyčka a Anti-Autoclicker (`src/js/game.js`)
+Frontend efektivně a spravedlivě registruje kliknutí na pizzu. Místo obyčejného přičítání skóre se každý klik zaznamenává do pole s ověřením časových razítek. Pokud hráč přesáhne limit kliknutí (což simulují cheaty a autoclickery), funkce smyčky ho tiše omezí.
+
+```javascript
+const _clickTimes = [];
+const MAX_CPS = 30;
+
+function handleClick(e) {
+    const now = Date.now();
+    // Vyčištění pole listu od kliků starších než vteřina
+    while (_clickTimes.length && now - _clickTimes[0] > 1000) _clickTimes.shift();
+    
+    // Ochrana před podvodem: přesáhl-li hráč stanovený limit 30 CPS, ignoruj
+    if (_clickTimes.length >= MAX_CPS) return;
+    
+    _clickTimes.push(now); // Bezpečný validní hook
+
+    const earned = gs.clickValue * getPrestigeMultiplier() * getClickBoostMult();
+    gs.money += earned;
+    gs.totalEarned += earned;
+    gs.totalClicks++;
+    
+    // Zobrazení padajících mincí na kurzoru a spuštění API ukládání
+    spawnFloat(e, earned);
+    spawnParticles(e);
+    updateDisplay();
+    saveGame();
+}
+```
+
+### 2. Přísná validace API Payloadu (`validation.py`)
+Všechny POST a PUT požadavky na server nesmí obsahovat cizí atributy. Zde je příklad validace ukládací struktury ve frameworku Flask. Takto kontrolujeme, že nepoctivý hráč nepošle vlastní atribut upravující peníze ze scamu.
+
+```python
+ALLOWED_SAVE_KEYS = {'pizzeriaName', 'money', 'totalEarned', 'clickValue', 'upgrades', 'lastSave', ...}
+
+def validate_save_payload(data):
+    if not isinstance(data, dict):
+        raise BadRequest('Save data must be a JSON object.')
+
+    # Ochrana proti Mass Assignment Security: Nedovolí zápis neznámých polí klienta
+    unknown_keys = set(data.keys()) - ALLOWED_SAVE_KEYS
+    if unknown_keys:
+        raise BadRequest(f'Unknown save fields: {", ".join(sorted(unknown_keys))}.')
+
+    # Provádění specifické kontroly minim, maxim a délky povolených stringů
+    pizzeria_name = validate_name(data.get('pizzeriaName'), 'pizzeriaName')
+    money = validate_number(data.get('money'), 'money', minimum=0)
+    # ... validace dalších fields ...
+
+    return {
+        'pizzeriaName': pizzeria_name,
+        'money': money,
+        # vracíme 100% bezpečně zkontrolovanou entitu přímo k zapsání k DB modulu
+    }
+```
+
+### 3. Rate-Limiting na vrstvě Autentizace (`server.py`)
+Flask server disponuje interním In-Memory algoritmem, zabraňujícím zlomyslným skriptům ověřovat masivně hesla a hrubou silou je narušit (Brute-Force útok).
+
+```python
+_login_buckets = defaultdict(deque)  # Paměť pro historii přihlášení (vázáno na klient IP)
+_LOGIN_RATE_LIMIT  = 10              # Maximum 10 odeslaných hesel...
+_LOGIN_RATE_WINDOW = 60.0            # ... ve fixním rámci jedné minuty.
+
+def _check_login_rate():
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr or '').split(',')[0].strip()
+    now = time.monotonic()
+    bucket = _login_buckets[ip]
+    cutoff = now - _LOGIN_RATE_WINDOW
+    
+    # Průběžné uvolňování zámků, jakmile IP odesílatele "vychladne" nad rámec 60s okna
+    while bucket and bucket[0] < cutoff:
+        bucket.popleft()
+        
+    # Zamítnutí s HTTP chybou Forbidden do frontendu a zamezení propustnosti loginu
+    if len(bucket) >= _LOGIN_RATE_LIMIT:
+        raise Forbidden('Příliš mnoho pokusů o přihlášení. Zkus to znovu za minutu.')
+        
+    bucket.append(now)
+```
+
+---
+
 ## 🔒 Zabezpečení (Security Implementations)
 - **Ověřování (Authentication):** Uživatelská hesla jsou hashována přes PBKDF2 metodiky.
 - **Ochrana API:** Zahrnuje *Rate-limiting* pro login formuláře (Brute-Force bariéra) i cloud ukládání. 
