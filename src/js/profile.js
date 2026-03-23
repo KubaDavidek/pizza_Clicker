@@ -8,16 +8,16 @@ async function openProfile() {
     el.profileNewPw.value = '';
 
     try {
-        const res  = await fetch('/api/profile');
+        const res = await fetch('/api/profile');
         const data = await res.json();
         if (!res.ok) return;
 
-        el.profileNickname.textContent  = data.nickname;
-        el.profileCreated.textContent   = data.created_at
+        el.profileNickname.textContent = data.nickname;
+        el.profileCreated.textContent = data.created_at
             ? new Date(data.created_at).toLocaleDateString('cs-CZ')
             : '–';
-        el.profileTotal.textContent     = formatNumber(data.total_earned) + ' €';
-        el.profileUpgrades.textContent  = data.upgrades_bought + ' / 22';
+        el.profileTotal.textContent = formatNumber(data.total_earned) + ' €';
+        el.profileUpgrades.textContent = data.upgrades_bought + ' / 22';
     } catch {
         el.profileNickname.textContent = '–';
     }
@@ -41,7 +41,7 @@ async function changePassword() {
 
     el.profileSavePw.disabled = true;
     try {
-        const res  = await fetch('/api/profile/password', {
+        const res = await fetch('/api/profile/password', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ old_password: oldPw, new_password: newPw }),
@@ -64,7 +64,7 @@ async function changePassword() {
 
 function showProfileMsg(msg, type) {
     el.profilePwMsg.textContent = msg;
-    el.profilePwMsg.className   = 'profile-msg ' + type;
+    el.profilePwMsg.className = 'profile-msg ' + type;
 }
 
 
